@@ -1,4 +1,4 @@
-# Project Title
+# Kakuro - Cross Sums
 
 ## Overview
 
@@ -138,5 +138,5 @@ Time: 1 day
 
 -A chat box where users can talk with each other while solving the puzzle
 
--Save progress feature - Make an option for players to save their puzzles that they are working on in localstorage.There will be an area on the homepage that shows their saved puzzles. 
+-Save progress feature: Make an option for players to save their puzzles that they are working on in localstorage. There will be an area on the homepage that shows their saved puzzles. 
 
