@@ -40,8 +40,6 @@ The app uses the PostgreSQL database provided by Supabase. All data is stored an
 
 ### Sitemap
 
-List the pages of your app with brief descriptions. You can show this visually, or write it out.
-
 Home page - There will be a default 5x5 grid so that new users can quickly play Kakuro. Below it, there will be images of different grid sizes, that allow users to choose a specific grid size they would like to play.
 
 Puzzle page - After selecting a grid, they will be taken to a puzzle page that will display a puzzle of the chosen grid size. They can choose a different grid size from this page, and have an option to play the puzzle with someone else. There will be buttons to go to the next puzzle.
@@ -52,7 +50,7 @@ Instructions - A page that has instructions for new users on how to play Kakuro.
 
 ### Mockups
 
-https://docs.google.com/presentation/d/1tqIXYB6dyCE77lv-kmtd_0m6eAqdQy8oJnnC-Nk88vY/edit?usp=sharing
+https://docs.google.com/presentation/d/1tqIXYB6dyCE77lv-kmtd_0m6eAqdQy8oJnnC-Nk88vY
 
 ### Data
 
