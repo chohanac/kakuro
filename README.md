@@ -1,4 +1,4 @@
-# Project Title
+# Kakuro - Cross Sums
 
 ## Overview
 
@@ -97,38 +97,38 @@ setGridData(res.new.data);
 
 ## Roadmap
 
-Task 1: Set Up 
+1: Set Up 
 Set up the React app and organize the project structure (components, utils, etc.).
 Time: 0.5 day
 
-Task 2: Puzzle Creation page
+2: Puzzle Creation page
 Make the puzzle creation page. Make a grid and functionality for users to make their own Kakuro puzzle Implement and to save the puzzle data.
 Time: 3 days
 
-Task 3:  Puzzle Validation Logic
+3:  Puzzle Validation Logic
 Create validation to check if the puzzle follows Kakuro rules.
 Time: 2 days
 
-Task 4: Set Up Local Server
+4: Set Up Local Server
 Set up a local server to save puzzle data as JSON files.
 Time: 1 days
 
-Task 5: Search Feature
+5: Search Feature
 Search functionality where users can search for saved puzzles by name.
 Time: 1 days
 
-Task 6: Puzzle Page
+6: Puzzle Page
 Allow users to input numbers and attempt to solve the puzzle.
 Time: 1 days
 
-Task 7: Supabase Setup 
+7: Supabase Setup 
 Set up Supabase for database management and basic multiplayer functionality for multiple users to interact with puzzle together in real-time.
 Time: 2 days
 
-Task 8: Testing & Bug Fixing
+8: Testing & Bug Fixing
 Time: 1 days
 
-Task 9: Final adjustments
+9: Final adjustments
 Styling, instruction page etc
 Time: 1 day
 
@@ -138,5 +138,5 @@ Time: 1 day
 
 -A chat box where users can talk with each other while solving the puzzle
 
--Save progress feature - Make an option for players to save their puzzles that they are working on in localstorage.There will be an area on the homepage that shows their saved puzzles. 
+-Save progress feature: Make an option for players to save their puzzles that they are working on in localstorage. There will be an area on the homepage that shows their saved puzzles. 
 
