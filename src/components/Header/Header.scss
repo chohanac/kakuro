@@ -1,0 +1,62 @@
+@use "../../styles/colors" as *;
+@use "../../styles/mixins" as *;
+
+.header {
+    padding: 1.5rem 1rem;
+    background-color: $Graphite;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.25rem;
+
+    @include tablet {
+        flex-direction: row;
+        padding: 1.75rem 2rem;
+    }
+
+    @include desktop {
+        padding: 1.75rem 8rem;
+    }
+
+    &__image {
+        height: 1.75rem;
+    }
+
+    &__links {
+        color: $Cloud;
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+
+        @include tablet {
+            width: auto;
+            gap: .5rem;
+        }
+
+        .active {
+            color: $White;
+            background-color: $Instock-Black;
+        }
+    }
+
+    &__link {
+        flex: 1;
+        height: 2.25rem;
+        border-radius: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @include tablet {
+            padding: 0 1rem;
+            height: 2.375rem;
+
+        }
+
+        &:hover {
+            color: $White;
+            text-decoration: underline;
+        }
+    }
+}

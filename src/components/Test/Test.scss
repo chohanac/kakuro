@@ -1,0 +1,18 @@
+.fixed-size-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 300px;
+    border: 2px solid black;
+    box-sizing: border-box;
+}
+
+.digit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2px;
+    /* Add minimal spacing between digits */
+}

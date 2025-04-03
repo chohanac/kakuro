@@ -1,0 +1,50 @@
+.container {
+    position: relative;
+    display: flex;
+    height: 100px;
+}
+
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    background-color: #3498db;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    border: 1px solid #2980b9;
+}
+
+.box-row {
+    display: flex;
+    position: absolute;
+    left: 100px;
+}
+
+.sliding-box {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #3498db;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    border: 1px solid #2980b9;
+    transform: translateX(-100%);
+    opacity: 0;
+    transition:
+        transform 0.3s ease-out var(--delay),
+        opacity 0.3s ease-out var(--delay);
+}
+
+.sliding-box.visible {
+    transform: translateX(0);
+    opacity: 1;
+    transition:
+        transform 0.3s ease-in var(--delay),
+        opacity 0.3s ease-in var(--delay);
+}

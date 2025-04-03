@@ -18,7 +18,6 @@ function App() {
 
             grid.push(row);
         }
-        console.log(grid);
         return (Array(size).fill().map(() => Array(size).fill('white')))
     }
 
