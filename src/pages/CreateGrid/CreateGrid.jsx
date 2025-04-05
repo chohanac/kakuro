@@ -196,7 +196,9 @@ function CreateGrid() {
                     (item) => !(item[0] === i && item[1] === selected.col)
                 );
                 if (cell[1] !== 0) {
-                    value = cell[0]
+                    if (value === -1) {
+                        value = cell[0]
+                    }
                     return i;
                 } else if (cell[0] === -1) {
                     err = false;
@@ -258,7 +260,9 @@ function CreateGrid() {
                     (item) => !(item[0] === selected.row && item[1] === i)
                 );
                 if (cell[1] !== 0) {
-                    value = cell[1]
+                    if (value === -1) {
+                        value = cell[1]
+                    }
                     return i;
                 } else if (cell[0] === -1) {
                     err = false;

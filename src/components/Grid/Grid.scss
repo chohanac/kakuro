@@ -41,14 +41,16 @@
                 background-color: gray;
             }
 
-            &--duplicate {
-                background-color: rgb(157, 255, 0);
-            }
+
 
             &--errors {
                 background-color: lightcoral;
             }
 
+
+            &--duplicate {
+                background-color: rgb(255, 0, 0);
+            }
 
 
 
@@ -56,6 +58,11 @@
             &--solved {
                 background-color: green;
 
+            }
+
+            &--solution {
+                background-color: rgb(236, 249, 211);
+                border: 2px solid black;
             }
 
 

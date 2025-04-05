@@ -24,12 +24,10 @@ function Grid({ gridList, solution }) {
 
 
     useEffect(() => {
-        console.log(gridList);
         clearGrid()
     }, [gridList]);
 
     useEffect(() => {
-        console.log(solution);
         if (solution) {
             setGrid(gridList);
         }
@@ -248,7 +246,14 @@ function Grid({ gridList, solution }) {
                     (item) => !(item[0] === i && item[1] === selected.col)
                 );
                 if (cell[1] !== 0) {
-                    value = cell[0]
+
+
+                    if (value === -1) {
+                        value = cell[0]
+                    }
+
+
+
                     return i;
                 } else if (cell[0] === -1) {
                     err = false;
@@ -265,14 +270,25 @@ function Grid({ gridList, solution }) {
         const result = cells.filter((item, index, array) =>
             array.some((otherItem, otherIndex) => otherIndex !== index && otherItem[2] === item[2])
         );
+
         result.forEach((i, j) => {
             duplicateArray.push([i[0], i[1]]);
         }
         )
         setDuplicates(duplicateArray)
+        console.log("horzontal", value);
         if (value === -1 || count === value) {
             err = false
         }
+
+
+
+        if (result.length !== 0) {
+            err = true
+        }
+
+
+
         if (start !== -1 && err) {
             for (let j = start; j < end; j++) {
                 if (grid[j][selected.col][1] === 0) {
@@ -281,10 +297,10 @@ function Grid({ gridList, solution }) {
             }
         }
         setCellErrors(cellErrorArray);
-        console.log(duplicateArray, "horizontal")
     }
 
     const checkDuplicatesVertical = (grid, selected) => {
+        console.log("hi");
         let start = -1;
         let end = grid.length;
         let err = true;
@@ -310,7 +326,10 @@ function Grid({ gridList, solution }) {
                     (item) => !(item[0] === selected.row && item[1] === i)
                 );
                 if (cell[1] !== 0) {
-                    value = cell[1]
+                    console.log(cell[1], "cell2");
+                    if (value === -1) {
+                        value = cell[1]
+                    }
                     return i;
                 } else if (cell[0] === -1) {
                     err = false;
@@ -331,10 +350,13 @@ function Grid({ gridList, solution }) {
             duplicateArray.push([i[0], i[1]]);
         }
         )
+        console.log(count, "countVert", value);
         setDuplicatesVertical(duplicateArray)
-        console.log(duplicateArray, "vertical")
         if (value === -1 || count === value) {
             err = false
+        }
+        if (result.length !== 0) {
+            err = true
         }
         if (start !== -1 && err) {
             for (let j = start; j < end; j++) {
@@ -424,8 +446,8 @@ function Grid({ gridList, solution }) {
             else {
                 setSolved(false);
             }
-            console.log(JSON.stringify(gridInfo.current));
-            console.log(JSON.stringify(gridList), "how");
+            // console.log(JSON.stringify(gridInfo.current));
+            // console.log(JSON.stringify(gridList), "how");
 
         }
     }
@@ -434,7 +456,7 @@ function Grid({ gridList, solution }) {
             <section className='grid'>
                 <div className='grid__container'>
                     {grid.map((row, rowIndex) => (<div key={rowIndex} className='grid__row'>{row.map((cell, cellIndex) => (
-                        <div tabIndex="0" onKeyDown={gridKeyPress} key={cellIndex} className={`grid__cell ${grid[rowIndex][cellIndex][1] === 0 && solved && "grid__cell--solved"} ${duplicates.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--duplicate" : ""
+                        <div tabIndex="0" onKeyDown={gridKeyPress} key={cellIndex} className={`grid__cell ${grid[rowIndex][cellIndex][1] === 0 && solved && "grid__cell--solved"} ${grid[rowIndex][cellIndex][1] === 0 && solution && "grid__cell--solution"}  ${duplicates.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--duplicate" : ""
                             } ${duplicatesVertical.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--duplicate" : ""
                             } ${cellErrors.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--errors" : ""
                             }  ${cellErrorsVertical.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--errors" : ""
