@@ -102,7 +102,7 @@ function App() {
       fontFamily: 'Arial, sans-serif',
     },
     controls: {
-      margin: '20px 0',
+      // margin: '20px 0',
       display: 'flex',
       justifyContent: 'center',
       flexWrap: 'wrap',

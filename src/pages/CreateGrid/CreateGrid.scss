@@ -5,16 +5,26 @@
     margin: '1px';
     position: 'relative';
     display: 'flex';
-    justifyContent: 'center';
-    alignItems: 'center';
+    justify-content: 'center';
+    align-items: 'center';
+}
+
+.createPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
 }
 
 .grid {
     &__container {
         display: flex;
+
     }
 
     &__cell {
+        outline: none;
         width: 4rem;
         height: 4rem;
         background-color: yellow;
@@ -44,6 +54,16 @@
         &--grey {
             background-color: gray;
         }
+
+        &--duplicate {
+            background-color: red;
+        }
+
+        &--errors {
+            background-color: lightcoral;
+        }
+
+
     }
 
     &__cell-triangle {
@@ -180,8 +200,6 @@
         }
     }
 
-
-
     .option {
         &__button {
 
@@ -191,49 +209,53 @@
         }
     }
 
-
-
-
 }
-
-
-
 
 .select {
     &__container {
         display: flex;
         gap: 1rem;
         margin-left: 25rem;
-        margin-bottom: 4rem;
+        // margin-bottom: 4rem;
     }
 
+
     &__black {
-        height: 2rem;
-        width: 2rem;
+        height: 3rem;
+        width: 3rem;
         background-color: black;
+        cursor: pointer;
+
 
         &--active {
-            border: 2px solid lightblue;
+            border: 4px solid lightblue;
         }
 
     }
 
     &__white {
-        height: 2rem;
-        width: 2rem;
+        height: 3rem;
+        width: 3rem;
         background-color: white;
         border: 2px solid grey;
+        cursor: pointer;
+
 
 
         &--active {
-            border: 2px solid lightblue;
+            border: 4px solid lightblue;
         }
 
     }
 }
 
 
-
+.choose {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 200px;
+}
 
 
 .select-color {

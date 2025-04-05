@@ -111,7 +111,7 @@ function App() {
             fontFamily: 'Arial, sans-serif',
         },
         controls: {
-            margin: '20px 0',
+            // margin: '20px 0',
             display: 'flex',
             justifyContent: 'center',
             flexWrap: 'wrap',
@@ -132,7 +132,7 @@ function App() {
             margin: '15px 0',
             fontSize: '14px',
             color: '#555',
-            maxWidth: '600px',
+            // maxWidth: '600px',
             marginLeft: 'auto',
             marginRight: 'auto',
             textAlign: 'left',

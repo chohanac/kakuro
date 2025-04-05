@@ -1,319 +1,110 @@
-.cell {
+.gridPage {
 
-    border: '1px solid #999';
-    cursor: 'pointer';
-    margin: '1px';
-    position: 'relative';
-    display: 'flex';
-    justifyContent: 'center';
-    alignItems: 'center';
-}
 
-.grid {
-    &__container {
-        display: flex;
-    }
 
-    &__cell {
-        width: 4rem;
-        height: 4rem;
-        background-color: yellow;
-
-        border: 2px solid black;
-        position: relative;
-
-        border-bottom-color: blue;
-        border-left-color: blue;
-
-        border-right-color: red;
-        border-top-color: red;
-
-        &--selected-tri {
-            background-color: blue;
+    .grid {
+        &__container {
+            display: flex;
         }
 
-        &--selected {
-            border-color: blue;
-            border-width: 4px;
-        }
+        transform: scale(1.5);
 
-        &--white {
-            background-color: white;
-        }
+        &__cell {
+            outline: none;
+            width: 4rem;
+            height: 4rem;
+            background-color: rgb(139, 234, 144);
 
-        &--grey {
-            background-color: gray;
-        }
-    }
+            border: 2px solid black;
+            position: relative;
 
-    &__cell-triangle {
-        position: relative;
-        width: 4rem;
-        height: 4rem;
-    }
+            border-bottom-color: blue;
+            border-left-color: blue;
 
-    &__triangle {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        clip-path: polygon(0 0, 100% 100%, 0 100%);
-        background: #ff6b6b;
+            border-right-color: rgb(77, 255, 0);
+            border-top-color: rgb(0, 255, 94);
 
-        &--selected {
-            background-color: blue;
-            // background-color: #50808E;
-            // background-color: #1C5D99;
+            &--selected-tri {
+                background-color: blue;
+            }
+
+            &--selected {
+                border-color: rgb(45, 45, 218);
+                border-width: 4px;
+            }
+
+            &--white {
+                background-color: rgb(236, 249, 211);
+            }
+
+            &--grey {
+                background-color: gray;
+            }
+
+            &--duplicate {
+                background-color: rgb(157, 255, 0);
+            }
+
+            &--errors {
+                background-color: lightcoral;
+            }
+
+
+
+
+
+            &--solved {
+                background-color: green;
+
+            }
+
+
+
 
         }
 
-        &--grey {
-            background-color: gray;
-        }
-
-
-        &--hidden {
-            display: none;
-        }
-
-        path {
-            stroke: black;
-            stroke: royalblue;
-            stroke-width: 0.5rem;
-        }
-
-
-        &::after {
-            content: '';
+        &__triangle {
             position: absolute;
-            inset: 0;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
             clip-path: polygon(0 0, 100% 100%, 0 100%);
-            border: 0px solid black;
-            pointer-events: none;
-        }
-    }
+            background: #a6ff6b;
 
-    &__triangle-number {
-        position: absolute;
-        top: 65%; // Adjusted for visual centering in triangle
-        left: 30%;
-        transform: translate(-50%, -50%);
-        cursor: default;
+            &--selected {
+                background-color: blue;
+                // background-color: #50808E;
+                // background-color: #1C5D99;
 
-        &--hidden {
-            display: none;
-        }
-
-        &--selected {
-            color: white;
-
-            &--blink {
-                animation: text-select 2s steps(8, start) 2s infinite;
-            }
-        }
-    }
-
-
-
-    &__cell-number {
-        position: absolute;
-        bottom: 50%; // Adjusted for visual centering in triangle
-        // Adjusted for visual centering in triangle
-        right: 30%;
-        // transform: translate(-50%, -50%);
-        z-index: 10;
-        cursor: default;
-
-        &--center {
-            bottom: 10%;
-            right: 35%;
-            font-size: 2rem;
-        }
-
-        &--hidden {
-            display: none;
-        }
-
-        &--selected {
-            color: white;
-
-            &--dark {
-                color: black;
             }
 
-            &--blink {
-                animation: text-select 2s steps(8, start) 2s infinite;
-                animation-delay: 2s;
+            &--grey {
+                background-color: rgb(117, 117, 117);
+            }
+
+
+            &--hidden {
+                display: none;
+            }
+
+            path {
+                stroke: black;
+                stroke: royalblue;
+                stroke-width: 0.5rem;
+            }
+
+
+            &::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                clip-path: polygon(0 0, 100% 100%, 0 100%);
+                border: 0px solid black;
+                pointer-events: none;
             }
         }
-    }
-
-    &__arrow-right {
-        width: 1rem;
-        position: absolute;
-        left: 2.75rem;
-        top: 0.75rem;
-
-        &--hidden {
-            display: none;
-        }
-
-        &--selected {
-            color: white;
-        }
-    }
-
-    &__arrow-down {
-        width: 1rem;
-        position: absolute;
-        left: 0.75rem;
-        top: 2.75rem;
-        transform: rotate(90deg);
-
-        &--hidden {
-            display: none;
-        }
-
-        &--selected {
-            color: white;
-        }
-    }
-
-
-
-    .option {
-        &__button {
-
-            &--active {
-                border-color: black;
-            }
-        }
-    }
-
-
-
-
-}
-
-
-
-
-.select {
-    &__container {
-        display: flex;
-        gap: 1rem;
-        margin-left: 25rem;
-        margin-bottom: 4rem;
-    }
-
-    &__black {
-        height: 2rem;
-        width: 2rem;
-        background-color: black;
-
-        &--active {
-            border: 2px solid lightblue;
-        }
 
     }
 
-    &__white {
-        height: 2rem;
-        width: 2rem;
-        background-color: white;
-        border: 2px solid grey;
-
-
-        &--active {
-            border: 2px solid lightblue;
-        }
-
-    }
-}
-
-
-
-
-
-.select-color {
-    color: #ff6b6b;
-    position: absolute;
-    right: 2rem;
-    bottom: 20rem;
-    animation: blink 4s infinite;
-
-    &--hidden {
-        display: none;
-    }
-}
-
-
-@keyframes blink {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.2;
-    }
-}
-
-
-@keyframes text-select {
-
-    0%,
-    100% {
-        opacity: 1;
-        /* Fully visible */
-    }
-
-    50% {
-        opacity: 0.4;
-        /* Hidden */
-    }
-}
-
-
-.enter-num {
-    display: none;
-
-    &--show {
-        display: block;
-    }
-}
-
-
-
-
-
-#root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
-}
-
-
-.logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-
-@keyframes logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    a:nth-of-type(2) .logo {
-        animation: logo-spin infinite 20s linear;
-    }
 }

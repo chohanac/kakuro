@@ -5,14 +5,17 @@ const Header = () => {
     return (
         <nav className="header">
             <NavLink to="/">
-                <img className="header__image" src="" alt="Instock logo" />
+                <h3>Cross Sums</h3>
             </NavLink>
             <div className="header__links">
                 <NavLink to="/" className="header__link">
-                    <h3>Warehouses</h3>
+                    <h3>Home</h3>
                 </NavLink>
-                <NavLink to="/inventory" className="header__link">
-                    <h3>Inventory</h3>
+                <NavLink to="/create" className="header__link">
+                    <h3>Create</h3>
+                </NavLink>
+                <NavLink to="/instructions" className="header__link">
+                    <h3>Instructions</h3>
                 </NavLink>
             </div>
         </nav>

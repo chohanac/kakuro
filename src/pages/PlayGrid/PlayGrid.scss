@@ -1,0 +1,66 @@
+.playPage {
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8.25rem;
+    align-items: center;
+
+    &__buttons {
+        display: flex;
+        gap: 2rem;
+    }
+
+    &__button {
+        cursor: pointer;
+        background-color: lightgreen;
+        padding: 0.5rem;
+        width: 6.25rem;
+        border-radius: 0.5rem;
+        border: 1px solid black;
+
+        &:hover {
+            background-color: rgb(177, 233, 177);
+        }
+
+        &:active {
+            border: 3px solid black;
+        }
+    }
+
+    .grid-select {
+        display: flex;
+        gap: 2rem;
+
+        button {
+            border: 2px solid black;
+        }
+    }
+
+    .group {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+    }
+}
+
+.solution {
+
+    width: 60%;
+
+    height: 40px;
+
+    background-color: rgb(180, 188, 220);
+    border: 1px solid black;
+
+
+    &--active {
+        background-color: rgb(124, 245, 49);
+        border: 3px solid black;
+    }
+
+    &:hover {
+        background-color: rgb(137, 181, 135);
+    }
+}
