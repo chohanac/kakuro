@@ -1,13 +1,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import './Grid.scss'
-
+import { CalculationInterpolation } from 'sass';
 function Grid({ gridList, solution }) {
-    // let gridList = [[[1, 0], [-1, 0], [2, -1], [-1, 0], [4, -1]], [[-1, 0], [3, 0], [5, 0], [-1, 0], [3, 0]], [[4, 0], [-1, 0], [6, 0], [6, 0], [-1, 0]], [[3, 4], [4, 0], [-1, 0], [3, 0], [-1, 0]], [[-1, 0], [-1, 1], [5, 0], [-1, 0], [-1, 0]]]
-
-    let gridLista = [[[-1, -1], [16, -1], [12, -1]], [[-1, 15], [7, 0], [8, 0]], [[-1, 13], [9, 0], [4, 0]]];
-
-
     const [gridSize, setGridSize] = useState(5);
     const [grid, setGrid] = useState(makeGrid());
     const [selectedColor, setSelectedColor] = useState(true);
@@ -21,12 +16,11 @@ function Grid({ gridList, solution }) {
     const [duplicates, setDuplicates] = useState([]);
     const [duplicatesVertical, setDuplicatesVertical] = useState([]);
     const [solved, setSolved] = useState(false);
-
-
+    const [hoverCell, setHoverCell] = useState(null);
+    const unique = { 3: [{ 2: 12 }], 4: [{ 2: 13 }], 6: [{ 3: 123 }], 7: [{ 3: 124 }], 10: [{ 4: 1234 }], 11: [{ 4: 1235 }], 15: [{ 5: 12345 }], 16: [{ 2: 79 }, { 5: 12346 }], 17: [{ 2: 89 }], 21: [{ 6: 123456 }], 22: [{ 6: 123457 }], 23: [{ 3: 689 }], 24: [{ 3: 789 }], 28: [{ 7: 1234567 }], 29: [{ 4: 5789 }, { 7: 1234568 }], 30: [{ 4: 6789 }], 34: [{ 5: 46789 }], 35: [{ 5: 56789 }], 36: [{ 8: 12345678 }], 37: [{ 8: 12345679 }], 38: [{ 6: 356789 }, { 8: 12345689 }], 39: [{ 6: 456789 }, { 8: 12345789 }], 40: [{ 8: 12346789 }], 41: [{ 7: 2456789 }, { 8: 12356789 }], 42: [{ 7: 3456789 }, { 8: 12456789 }], 43: [{ 8: 13456789 }], 44: [{ 8: 23456789 }], 45: [{ 9: 123456789 }] };
     useEffect(() => {
         clearGrid()
     }, [gridList]);
-
     useEffect(() => {
         if (solution) {
             setGrid(gridList);
@@ -35,28 +29,7 @@ function Grid({ gridList, solution }) {
             setGrid(gridInfo.current);
         }
     }, [solution]);
-
-
-    // useEffect(() => {
-    //     const handleClick = (e) => {
-    //         if (e.target.className === "select__black select__black--active" || e.target.className === 'select__white select__white--active') {
-    //             return
-    //         }
-    //         else {
-    //             setSelectedCell(null);
-    //         }
-
-    //     };
-    //     document.addEventListener('click', handleClick);
-    //     return () => document.removeEventListener('click', handleClick); // Cleanup
-    // }, []);
-
-
-
-
-
     function makeGrid() {
-        // console.log(gridList)
         const size = gridList.length
         let grid = [];
         let row = [];
@@ -75,13 +48,8 @@ function Grid({ gridList, solution }) {
                 return item;
             })
         );
-        // console.log(gridList)
-        // console.log(blankGrid)
         return blankGrid;
-        // return gridList;
-
     };
-
     const sizeChange = (size) => {
         setGridSize(size);
         const newGrid = makeGrid(size);
@@ -91,7 +59,6 @@ function Grid({ gridList, solution }) {
 
 
     };
-
     const clearGrid = () => {
         const newGrid = makeGrid(gridSize)
         setGrid(newGrid)
@@ -103,8 +70,6 @@ function Grid({ gridList, solution }) {
         setDuplicatesVertical([])
 
     };
-
-
     const isValidKey = (key, selected, grid) => {
         if ((key >= '0' && key <= '9') || key === "Backspace" && selected) {
             if (!(grid[selected.row][selected.col][1] === 0 && key === "0") && !(grid[selected.row][selected.col][0] === -1 && !selected.triangle && key === "0") && !(grid[selected.row][selected.col][1] === -1 && selected.triangle && key === "0")) {
@@ -113,12 +78,6 @@ function Grid({ gridList, solution }) {
         }
         return false
     }
-
-
-
-    // const checkRowError () => { }
-
-
     const cellClick = (row, col, triangle = false, above = true) => {
         if (gridInfo.current[row][col][1] !== 0 || solution) {
             if (solution) {
@@ -152,10 +111,8 @@ function Grid({ gridList, solution }) {
                     else {
                         setSelectedCell(null)
                     }
-
                 }
                 else {
-
                     if (col !== gridInfo.current.length - 1) {
                         setSelectedCell({ row, col, triangle: true })
                     }
@@ -169,10 +126,8 @@ function Grid({ gridList, solution }) {
                     }
                     else {
                         setSelectedCell(null)
-
                     }
                 }
-
             }
         }
         if (newGrid[row][col][1] !== 0 && selectedColor) {
@@ -187,7 +142,6 @@ function Grid({ gridList, solution }) {
         setGrid(newGrid);
         gridInfo.current = newGrid;
     };
-
     function checkSolution(arr1, arr2) {
         if (arr1.length !== arr2.length) {
             return false;
@@ -206,8 +160,6 @@ function Grid({ gridList, solution }) {
         }
         return true;
     }
-
-
     const colorClick = (white) => {
         if (white) {
             setSelectedColor(true);
@@ -216,8 +168,7 @@ function Grid({ gridList, solution }) {
             setSelectedColor(false);
         }
     }
-
-    const checkDuplicatesHorizontal = (grid, selected) => {
+    const checkMistakes = (grid, selected, vertical = false) => {
         let start = -1;
         let end = grid.length;
         let err = true;
@@ -230,37 +181,24 @@ function Grid({ gridList, solution }) {
         let value = -1;
         function loop(start, condition, step) {
             for (let i = start; condition(i); i += step) {
-                const cell = grid[i][selected.col];
-                duplicateArray = duplicateArray.filter(
-                    (item) => !(item[0] === i && item[1] === selected.col)
-                );
-                duplicateArray = duplicateArray.filter(
-                    (item) => {
-                        // if (item[0] === selected.row && item[1] === selected.col) {
-                        //     return item
-                        // }
-                        return !((item[0] === i && item[1] === selected.col))
-                    }
-                );
-                cellErrorArray = cellErrorArray.filter(
-                    (item) => !(item[0] === i && item[1] === selected.col)
-                );
+                const cell = vertical ? grid[selected.row][i] : grid[i][selected.col];
+                duplicateArray = duplicateArray.filter((item) => {
+                    return vertical ? !(item[0] === selected.row && item[1] === i) : !(item[0] === i && item[1] === selected.col);
+                });
+                cellErrorArray = cellErrorArray.filter((item) => {
+                    return vertical ? !(item[0] === selected.row && item[1] === i) : !(item[0] === i && item[1] === selected.col);
+                });
                 if (cell[1] !== 0) {
 
-
                     if (value === -1) {
-                        value = cell[0]
+                        value = vertical ? cell[1] : cell[0];
                     }
-
-
-
                     return i;
                 } else if (cell[0] === -1) {
                     err = false;
                 } else {
                     count += cell[0];
-
-                    cells.push([i, selected.col, cell[0]]);
+                    cells.push(vertical ? [selected.row, i, cell[0]] : [i, selected.col, cell[0]]);
                 }
             }
             return null;
@@ -270,109 +208,43 @@ function Grid({ gridList, solution }) {
         const result = cells.filter((item, index, array) =>
             array.some((otherItem, otherIndex) => otherIndex !== index && otherItem[2] === item[2])
         );
-
         result.forEach((i, j) => {
             duplicateArray.push([i[0], i[1]]);
         }
         )
-        setDuplicates(duplicateArray)
-        console.log("horzontal", value);
         if (value === -1 || count === value) {
             err = false
         }
-
-
-
-        if (result.length !== 0) {
-            err = true
-        }
-
-
-
         if (start !== -1 && err) {
             for (let j = start; j < end; j++) {
-                if (grid[j][selected.col][1] === 0) {
-                    cellErrorArray.push([j, selected.col])
-                }
-            }
-        }
-        setCellErrors(cellErrorArray);
-    }
 
-    const checkDuplicatesVertical = (grid, selected) => {
-        console.log("hi");
-        let start = -1;
-        let end = grid.length;
-        let err = true;
-        const arr = [];
-        let errArr = [];
-        const cells = [];
-        let duplicateArray = [...duplicatesVertical];
-        let cellErrorArray = [...cellErrorsVertical];
-        let count = 0;
-        let value = -1;
-        function loop(start, condition, step) {
-            for (let i = start; condition(i); i += step) {
-                const cell = grid[selected.row][i];
-                duplicateArray = duplicateArray.filter(
-                    (item) => {
-                        // if (item[0] === selected.row && item[1] === selected.col) {
-                        //     return item
-                        // }
-                        return !((item[0] === selected.row && item[1] === i))
-                    }
-                );
-                cellErrorArray = cellErrorArray.filter(
-                    (item) => !(item[0] === selected.row && item[1] === i)
-                );
-                if (cell[1] !== 0) {
-                    console.log(cell[1], "cell2");
-                    if (value === -1) {
-                        value = cell[1]
-                    }
-                    return i;
-                } else if (cell[0] === -1) {
-                    err = false;
-                } else {
-                    count += cell[0];
-
-                    cells.push([selected.row, i, cell[0]]);
-                }
             }
-            return null;
-        }
-        start = loop(selected.col, i => i >= 0, -1) ?? start;
-        end = loop(selected.col + 1, i => i < grid.length, 1) ?? end;
-        const result = cells.filter((item, index, array) =>
-            array.some((otherItem, otherIndex) => otherIndex !== index && otherItem[2] === item[2])
-        );
-        result.forEach((i, j) => {
-            duplicateArray.push([i[0], i[1]]);
-        }
-        )
-        console.log(count, "countVert", value);
-        setDuplicatesVertical(duplicateArray)
-        if (value === -1 || count === value) {
-            err = false
-        }
-        if (result.length !== 0) {
-            err = true
         }
         if (start !== -1 && err) {
             for (let j = start; j < end; j++) {
-                if (grid[selected.row][j][1] === 0) {
-                    cellErrorArray.push([selected.row, j])
+                if (vertical) {
+                    if (grid[selected.row][j][1] === 0) {
+                        cellErrorArray.push([selected.row, j])
+                    }
                 }
+                else {
+                    if (grid[j][selected.col][1] === 0) {
+                        cellErrorArray.push([j, selected.col])
+                    }
+                }
+
             }
         }
-        setCellErrorsVertical(cellErrorArray);
-        return
+        if (vertical) {
+            setDuplicatesVertical(duplicateArray);
+            setCellErrorsVertical(cellErrorArray);
+        }
+        else {
+            setDuplicates(duplicateArray);
+            setCellErrors(cellErrorArray);
+        }
+
     }
-
-
-
-
-
     const gridKeyPress = (e) => {
         if (solution) {
             return
@@ -394,15 +266,14 @@ function Grid({ gridList, solution }) {
             let key = parseInt(e.key);
             if (e.key === "Backspace") {
                 key = -1;
-                checkDuplicatesHorizontal(newGrid, selectedCell);
-                checkDuplicatesVertical(newGrid, selectedCell);
-
+                checkMistakes(newGrid, selectedCell);
+                checkMistakes(newGrid, selectedCell, true);
 
             }
             if (newGrid[selectedCell.row][selectedCell.col][1] === 0) {
                 newGrid[selectedCell.row][selectedCell.col][0] = key;
-                checkDuplicatesHorizontal(newGrid, selectedCell);
-                checkDuplicatesVertical(newGrid, selectedCell);
+                checkMistakes(newGrid, selectedCell);
+                checkMistakes(newGrid, selectedCell, true);
             }
             else if (selectedCell.row === newGrid.length - 1 && selectedCell.col === newGrid.length - 1) {
                 return;
@@ -446,38 +317,246 @@ function Grid({ gridList, solution }) {
             else {
                 setSolved(false);
             }
-            // console.log(JSON.stringify(gridInfo.current));
-            // console.log(JSON.stringify(gridList), "how");
 
         }
     }
+    const checkUnique = (row, col) => {
+        let length = 0;
+        let lengthVertical = 0;
+        const uniqueNums = [-1, -1];
+        if (grid[row][col][0] !== -1) {
+            while (row + length + 1 < grid.length && grid[row + length + 1][col][1] === 0) {
+                length++;
+            }
+        }
+        if (grid[row][col][1] !== -1)
+
+            while (col + lengthVertical + 1 < grid[row].length && grid[row][col + lengthVertical + 1][1] === 0) {
+                lengthVertical++;
+            }
+        const isUnique = (sum, length) => {
+            let num = -1
+            unique[sum]?.map(i => {
+                if (i[length]) {
+                    num = i[length];
+                }
+            })
+            return num;
+        }
+        return ([isUnique(grid[row][col][0], length), isUnique(grid[row][col][1], lengthVertical)])
+    }
+    const cellClasses = (row, col) => {
+        const classes = ['grid__cell'];
+        if (grid[row][col][1] === 0 && solved) {
+
+            classes.push('grid__cell--solved');
+
+        }
+        if (grid[row][col][1] === 0 && solution) {
+            classes.push('grid__cell--solution');
+
+        }
+        if (duplicates.some(([x, y]) => x === row && y === col)) {
+            classes.push('grid__cell--duplicate');
+        }
+        if (duplicatesVertical.some(([x, y]) => x === row && y === col)) {
+            classes.push('grid__cell--duplicate');
+
+        }
+        if (cellErrors.some(([x, y]) => x === row && y === col)) {
+            classes.push('grid__cell--errors');
+        }
+        if (cellErrorsVertical.some(([x, y]) => x === row && y === col)) {
+
+            classes.push('grid__cell--errors');
+
+        }
+        if (selectedCell !== null && selectedCell.row === row && selectedCell.col === col && !selectedCell.triangle && grid[row][col][1] !== 0) {
+            classes.push('grid__cell--selected-tri');
+        }
+        if (grid[0].length === row + 1 && grid[row][col][1] !== 0) {
+            classes.push('grid__cell--grey');
+        }
+        if (grid[row][col][1] === 0) {
+            classes.push('grid__cell--white');
+            if (hoverCell) {
+                let length = grid.length;
+                if (checkUnique(hoverCell.row, hoverCell.col)[0] !== -1) {
+
+                    for (let i = hoverCell.row + 1; i < grid.length; i++) {
+                        if (grid[i][hoverCell.col][1] !== 0) {
+                            length = i;
+                            break
+                        }
+                    }
+                    if (hoverCell.triangle && hoverCell.bounds) {
+                        if (hoverCell.col === col) {
+                            if (row > hoverCell.row && row < length) {
+                                classes.push("grid__cell--hover-active");
+                            }
+                        }
+                    }
+
+                }
+                if (checkUnique(hoverCell.row, hoverCell.col)[1] !== -1) {
+                    length = grid.length
+                    for (let i = hoverCell.col + 1; i < grid.length; i++) {
+                        if (grid[hoverCell.row][i][1] !== 0) {
+                            length = i;
+                            break
+                        }
+                    }
+                    if (!hoverCell.triangle && hoverCell.bounds) {
+                        if (hoverCell.row === row) {
+                            if (col > hoverCell.col && col < length) {
+                                classes.push("grid__cell--hover-active");
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        else {
+            classes.push('grid__cell--target');
+
+            if (checkUnique(row, col)[0] !== -1) {
+                classes.push('grid__cell--unique')
+            }
+        }
+        if (selectedCell !== null && selectedCell.row === row && selectedCell.col === col && grid[row][col][1] === 0) {
+            classes.push('grid__cell--selected');
+        }
+        return classes.join(' ');
+    };
+    const cellNumberClasses = (row, col) => {
+        const classes = ['grid__cell-number'];
+
+        if (grid[row][col][1] === 0) {
+            classes.push('grid__cell-number--center');
+            if (grid[row][col][0] === -1) {
+                classes.push('grid__cell-number--hidden');
+            }
+        } else if (grid[row][col][1] !== 0 && grid[row][col][0] === -1) {
+            classes.push('grid__cell-number--hidden');
+        }
+
+        if (selectedCell !== null && selectedCell.row === row && selectedCell.col === col && selectedCell.triangle === false) {
+            classes.push('grid__cell-number--selected');
+            if (gridInfo.current[row][col][1] === 0) {
+                classes.push('grid__cell-number--selected--dark');
+            }
+            if (blink) {
+                classes.push('grid__cell-number--selected--blink');
+            }
+        }
+
+        return classes.join(' ');
+    };
+    const TriangleClasses = (row, col) => {
+        const classes = ['grid__triangle'];
+        if (selectedCell !== null && selectedCell.row === row && selectedCell.col === col && selectedCell.triangle === true) {
+            classes.push('grid__triangle--selected');
+        }
+
+        if (grid[row][col][1] === 0) {
+            classes.push('grid__triangle--hidden');
+        }
+
+        if (grid.length === col + 1) {
+            classes.push('grid__triangle--grey');
+        }
+
+        if (checkUnique(row, col)[1] !== -1) {
+            classes.push('grid__triangle--uniqueVertical')
+        }
+
+        return classes.join(' ');
+    };
+    const RightArrowClasses = (row, col) => {
+        const classes = ['grid__arrow-right'];
+
+        if (grid[row][col][1] === 0 || grid[row][col][0] === -1) {
+            classes.push('grid__arrow-right--hidden');
+        }
+
+        if (grid[0].length === row + 1) {
+            classes.push('grid__arrow-right--hidden');
+        }
+
+        if (selectedCell !== null && selectedCell.row === row && selectedCell.col === col && selectedCell.triangle === false) {
+            classes.push('grid__arrow-right--selected');
+        }
+
+        return classes.join(' ');
+    };
+    const TriangleNumberClasses = (row, col) => {
+        const classes = ['grid__triangle-number'];
+        if (grid[row][col][1] === 0 || grid[row][col][1] === -1) {
+            classes.push('grid__triangle-number--hidden');
+        }
+        if (selectedCell !== null && selectedCell.row === row && selectedCell.col === col && selectedCell.triangle === true) {
+            classes.push('grid__triangle-number--selected');
+            if (blink) {
+                classes.push('grid__triangle-number--selected--blink');
+            }
+        }
+        return classes.join(' ');
+    };
+    const DownArrowClasses = (row, col) => {
+        const classes = ['grid__arrow-down'];
+        if (grid[row][col][1] === 0 || grid[row][col][1] === -1) {
+            classes.push('grid__arrow-down--hidden');
+        }
+        if (grid.length === col + 1) {
+            classes.push('grid__arrow-down--hidden');
+        }
+        if (selectedCell !== null && selectedCell.row === row && selectedCell.col === col && selectedCell.triangle === true) {
+            classes.push('grid__arrow-down--selected');
+        }
+        return classes.join(' ');
+    };
+    const mouseEnter = (row, col, triangle, bounds) => {
+        setHoverCell({ row, col, triangle, bounds })
+    };
+    const mouseLeave = () => {
+        setHoverCell(null)
+    };
     return (
         <div className='gridPage'>
             <section className='grid'>
                 <div className='grid__container'>
                     {grid.map((row, rowIndex) => (<div key={rowIndex} className='grid__row'>{row.map((cell, cellIndex) => (
-                        <div tabIndex="0" onKeyDown={gridKeyPress} key={cellIndex} className={`grid__cell ${grid[rowIndex][cellIndex][1] === 0 && solved && "grid__cell--solved"} ${grid[rowIndex][cellIndex][1] === 0 && solution && "grid__cell--solution"}  ${duplicates.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--duplicate" : ""
-                            } ${duplicatesVertical.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--duplicate" : ""
-                            } ${cellErrors.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--errors" : ""
-                            }  ${cellErrorsVertical.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--errors" : ""
-                            } ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && grid[rowIndex][cellIndex][1] != 0 && "grid__cell--selected-tri"} ${grid[0].length === rowIndex + 1 && grid[rowIndex][cellIndex][1] !== 0 && "grid__cell--grey"} ${grid[rowIndex][cellIndex][1] == 0 && "grid__cell--white"}  ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && grid[rowIndex][cellIndex][1] == 0 && "grid__cell--selected"}`} onClick={(e) => {
+                        <div tabIndex="0" onKeyDown={gridKeyPress} key={cellIndex} className={cellClasses(rowIndex, cellIndex)} onClick={(e) => {
+                            e.stopPropagation();
+                            const square = e.currentTarget.getBoundingClientRect();
+                            const x = e.clientX - square.left;
+                            const y = e.clientY - square.top;
+                            cellClick(rowIndex, cellIndex, false, x > y)
+
+                        }}
+                            onMouseMove={(e) => {
                                 e.stopPropagation();
                                 const square = e.currentTarget.getBoundingClientRect();
                                 const x = e.clientX - square.left;
                                 const y = e.clientY - square.top;
-                                cellClick(rowIndex, cellIndex, false, x > y)
-                            }}>  <span className={`grid__cell-number   ${grid[rowIndex][cellIndex][1] === 0 && "grid__cell-number--center"} ${(grid[rowIndex][cellIndex][1] === 0 && grid[rowIndex][cellIndex][0] === -1) && "grid__cell-number--hidden"} ${(grid[rowIndex][cellIndex][1] !== 0 && grid[rowIndex][cellIndex][0] === -1) && "grid__cell-number--hidden"}  ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && "grid__cell-number--selected"}
-                        ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && gridInfo.current[rowIndex][cellIndex][1] === 0 && "grid__cell-number--selected--dark"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && blink && "grid__cell-number--selected--blink"}`}>{cell[0]}</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`grid__arrow-right ${(grid[rowIndex][cellIndex][1] === 0 || grid[rowIndex][cellIndex][0] === -1) && "grid__arrow-right--hidden"} ${grid[0].length === rowIndex + 1 && "grid__arrow-right--hidden"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && "grid__arrow-right--selected"}  `}>
+                                mouseEnter(rowIndex, cellIndex, x > y, x <= 100 && y <= 100)
+                            }
+                            }
+                            onMouseLeave={() => mouseLeave()}>
+                            <span className={cellNumberClasses(rowIndex, cellIndex)}>{cell[0]}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={RightArrowClasses(rowIndex, cellIndex)}>
                                 <path d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
                             </svg>
                             <svg
                                 viewBox="0 0 200 200"
-                                className={`grid__triangle ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && "grid__triangle--selected"} ${(grid[rowIndex][cellIndex][1] === 0) && "grid__triangle--hidden"}  ${grid.length === cellIndex + 1 && "grid__triangle--grey"}`}
+                                className={TriangleClasses(rowIndex, cellIndex)}
                                 preserveAspectRatio="none" onClick={(e) => {
                                     e.stopPropagation();
                                     cellClick(rowIndex, cellIndex, true)
                                 }}
+                                onMouseEnter={() => mouseEnter(rowIndex, cellIndex, true)}
+                                onMouseLeave={() => mouseLeave()}
                             >
                                 <path
                                     d="M 0 0 L 200 200 L 200 200 Z"
@@ -486,17 +565,51 @@ function Grid({ gridList, solution }) {
                                     strokeWidth="2"
                                 />
                             </svg>
-                            <span className={`grid__triangle-number ${(grid[rowIndex][cellIndex][1] === 0 || grid[rowIndex][cellIndex][1] === -1) && "grid__triangle-number--hidden"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && "grid__triangle-number--selected"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && blink && "grid__triangle-number--selected--blink"}`} onClick={(e) => {
+                            <span className={TriangleNumberClasses(rowIndex, cellIndex)} onClick={(e) => {
                                 e.stopPropagation();
                                 cellClick(rowIndex, cellIndex, true)
                             }} >{cell[1]}</span>
 
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`grid__arrow-down ${(grid[rowIndex][cellIndex][1] === 0 || grid[rowIndex][cellIndex][1] === -1) && "grid__arrow-down--hidden"}  ${grid.length === cellIndex + 1 && "grid__arrow-down--hidden"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && "grid__arrow-down--selected"} `} onClick={(e) => {
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={DownArrowClasses(rowIndex, cellIndex)} onClick={(e) => {
                                 e.stopPropagation();
                                 cellClick(rowIndex, cellIndex, true)
                             }}>
                                 <path d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
                             </svg>
+                            <div className={`grid__unique ${solution && "grid__unique--hide"}`}>
+                                {
+                                    checkUnique(rowIndex, cellIndex)[0] !== -1 && grid[rowIndex][cellIndex][1] !== 0 && checkUnique(rowIndex, cellIndex)[0].toString().split("").map((i, index) => (
+                                        <div
+
+                                            key={index}
+                                            className={`grid__cell grid__unique-cell ${hoverCell?.row === rowIndex && hoverCell?.col === cellIndex && hoverCell?.triangle && hoverCell?.bounds && "grid__unique-cell--show"}`}
+                                            style={{
+                                                '--delay': `${index * 0.1}s`,
+                                                '--distance': `${index}`
+                                            }}
+                                        >
+                                            {i}
+                                        </div>
+                                    ))
+
+                                }
+                            </div>
+                            {
+                                checkUnique(rowIndex, cellIndex)[1] !== -1 && grid[rowIndex][cellIndex][1] !== 0 && checkUnique(rowIndex, cellIndex)[1].toString().split("").map((i, index) => (
+                                    <div
+                                        key={index}
+                                        className={`grid__cell grid__unique-cell grid__unique-cell--vertical ${hoverCell?.row === rowIndex && hoverCell?.col === cellIndex && !hoverCell?.triangle && hoverCell?.bounds && "grid__unique-cell--vertical--show"}`}
+                                        style={{
+                                            '--delay': `${index * 0.1}s`,
+                                            '--distance': `${index}`
+                                        }}
+                                    >
+                                        {i}
+
+                                    </div>
+                                ))
+
+                            }
                         </div>
                     ))}</div>))}
                 </div>
@@ -505,5 +618,8 @@ function Grid({ gridList, solution }) {
         </div >
     );
 }
-
 export default Grid;
+
+
+
+

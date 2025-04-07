@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./Test2.scss";
-
 function Test2() {
     const [hovered, setHovered] = useState(false);
 

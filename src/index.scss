@@ -11,18 +11,15 @@
   list-style-type: none;
   text-decoration: none;
   color: inherit;
-
 }
 
 :root {
-  font-family: Montserrat, Helvetica, Arial, sans-serif;
+  font-family: MainFont, Montserrat, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 600;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -46,7 +43,6 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: rgb(255, 255, 242);
-
 }
 
 h1 {

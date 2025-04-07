@@ -11,3 +11,31 @@
     font-weight: 600;
     font-style: normal;
 }
+
+@font-face {
+    font-family: MainFont;
+    src: url('/src/assets/font/font-medium.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Ubuntu;
+    src: url('/src/assets/font/ubuntu-regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Ubuntu;
+    src: url('/src/assets/font/ubuntu-medium.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Alata;
+    src: url('/src/assets/font/alata-regular.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}

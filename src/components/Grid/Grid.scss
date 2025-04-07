@@ -1,13 +1,19 @@
 .gridPage {
+    transform: scale(1.5);
 
-
+    .grid-background {
+        background-color: red;
+        z-index: 10;
+    }
 
     .grid {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         &__container {
             display: flex;
         }
-
-        transform: scale(1.5);
 
         &__cell {
             outline: none;
@@ -35,25 +41,32 @@
 
             &--white {
                 background-color: rgb(236, 249, 211);
+                z-index: 0;
+                transition:
+                    z-index 0.1s ease-out 0.3s,
+            }
+
+            &--hover-active {
+                z-index: -15;
+                transition:
+                    z-index 0.01s ease-in 0.01s,
+            }
+
+            &--target {
+                background-color: orange;
             }
 
             &--grey {
                 background-color: gray;
             }
 
-
-
             &--errors {
                 background-color: lightcoral;
             }
 
-
             &--duplicate {
                 background-color: rgb(255, 0, 0);
             }
-
-
-
 
             &--solved {
                 background-color: green;
@@ -65,9 +78,51 @@
                 border: 2px solid black;
             }
 
+            &--unique {
+                background-color: lightblue;
+            }
+        }
 
+        &__unique {
+            position: absolute;
+            display: flex;
+            z-index: -1;
+        }
 
+        &__unique-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #3498db;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            transform: translateX(calc(var(--distance) * -100%)) translateY(-5%);
+            opacity: 1;
+            z-index: -1;
+            transition:
+                transform 0.3s ease-out calc(0.1s),
+                z-index 0.3s ease-out calc(.1s);
 
+            &--vertical {
+                transform: translateX(-5%) translateY(calc(var(--distance) * -100%));
+
+                &--show {
+                    transform: translateX(-5%) translateY(97%);
+                    opacity: 1;
+                    transition:
+                        transform 0.3s ease-in var(--delay),
+                        opacity 0.3s ease-in var(--delay);
+                }
+            }
+
+            &--show {
+                transform: translateX(97%) translateY(-5%);
+                opacity: 1;
+                transition:
+                    transform 0.3s ease-in var(--delay),
+                    opacity 0.3s ease-in var(--delay);
+            }
         }
 
         &__triangle {
@@ -79,17 +134,17 @@
             clip-path: polygon(0 0, 100% 100%, 0 100%);
             background: #a6ff6b;
 
+            &--uniqueVertical {
+                background-color: lightcoral;
+            }
+
             &--selected {
                 background-color: blue;
-                // background-color: #50808E;
-                // background-color: #1C5D99;
-
             }
 
             &--grey {
                 background-color: rgb(117, 117, 117);
             }
-
 
             &--hidden {
                 display: none;
@@ -101,7 +156,6 @@
                 stroke-width: 0.5rem;
             }
 
-
             &::after {
                 content: '';
                 position: absolute;
@@ -111,7 +165,5 @@
                 pointer-events: none;
             }
         }
-
     }
-
 }

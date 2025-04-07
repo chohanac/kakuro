@@ -13,22 +13,6 @@ function CreateGrid() {
     const [cellErrorsVertical, setCellErrorsVertical] = useState([]);
     const [duplicates, setDuplicates] = useState([]);
     const [duplicatesVertical, setDuplicatesVertical] = useState([]);
-
-
-    // useEffect(() => {
-    //     const handleClick = (e) => {
-    //         if (e.target.className === "select__black select__black--active" || e.target.className === 'select__white select__white--active') {
-    //             return
-    //         }
-    //         else {
-    //             setSelectedCell(null);
-    //         }
-
-    //     };
-    //     document.addEventListener('click', handleClick);
-    //     return () => document.removeEventListener('click', handleClick); // Cleanup
-    // }, []);
-
     useEffect(() => {
 
         const keyDownPress = (e) => {
@@ -90,12 +74,6 @@ function CreateGrid() {
         }
         return false
     }
-
-
-
-    // const checkRowError () => { }
-
-
     const cellClick = (row, col, triangle = false, above = true) => {
         const newGrid = gridInfo.current.map(row =>
             [...row].map(cell =>
@@ -186,9 +164,6 @@ function CreateGrid() {
                 );
                 duplicateArray = duplicateArray.filter(
                     (item) => {
-                        // if (item[0] === selected.row && item[1] === selected.col) {
-                        //     return item
-                        // }
                         return !((item[0] === i && item[1] === selected.col))
                     }
                 );
@@ -231,7 +206,6 @@ function CreateGrid() {
             }
         }
         setCellErrors(cellErrorArray);
-        console.log(duplicateArray, "horizontal")
     }
 
     const checkDuplicatesVertical = (grid, selected) => {
@@ -250,9 +224,6 @@ function CreateGrid() {
                 const cell = grid[selected.row][i];
                 duplicateArray = duplicateArray.filter(
                     (item) => {
-                        // if (item[0] === selected.row && item[1] === selected.col) {
-                        //     return item
-                        // }
                         return !((item[0] === selected.row && item[1] === i))
                     }
                 );
@@ -284,7 +255,6 @@ function CreateGrid() {
         }
         )
         setDuplicatesVertical(duplicateArray)
-        console.log(duplicateArray, "vertical")
         if (value === -1 || count === value) {
             err = false
         }
@@ -368,7 +338,6 @@ function CreateGrid() {
             }
             setGrid(newGrid);
             gridInfo.current = newGrid;
-            console.log(JSON.stringify(gridInfo.current));
         }
     }
     return (

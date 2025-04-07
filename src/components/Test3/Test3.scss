@@ -1,0 +1,73 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.grid-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.grid-item:hover {
+    transform: scale(1.1);
+}
+
+.extra-squares {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+    visibility: hidden;
+    transition: visibility 0.3s ease;
+}
+
+.extra-square {
+    width: 100px;
+    height: 100px;
+    background-color: #009688;
+    opacity: 0;
+    position: absolute;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.grid-item:hover .extra-squares {
+    visibility: visible;
+}
+
+.grid-item:hover .extra-square {
+    opacity: 1;
+}
+
+.grid-item:hover .extra-square:nth-child(1) {
+    transform: translateY(0);
+}
+
+.grid-item:hover .extra-square:nth-child(2) {
+    transform: translateY(100%);
+}
+
+.grid-item:hover .extra-square:nth-child(3) {
+    transform: translateY(200%);
+}
