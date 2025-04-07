@@ -10,7 +10,7 @@ const example = [[[-1, -1], [11, -1], [10, -1], [-1, -1], [-1, -1]], [[-1, 4], [
 function PlayGrid() {
     const [solution, setSolution] = useState(false);
     const [gridList, setGridList] = useState([[[-1, -1], [16, -1], [12, -1]], [[-1, 15], [7, 0], [8, 0]], [[-1, 13], [9, 0], [4, 0]]]);
-
+    const [testing, setTesting] = useState(false);
 
     async function insertData(b) {
         const { data, error } = await supabase
@@ -19,7 +19,6 @@ function PlayGrid() {
                 { grid: b, size: b.length }
             ]);
     }
-
     async function fetchGrids(size) {
         const { data, error } = await supabase
             .from('grids')
@@ -34,14 +33,10 @@ function PlayGrid() {
         }
     }
 
-
     useEffect(() => {
         fetchGrids();
 
     }, []);
-
-
-
 
     const three = () => {
 
@@ -63,6 +58,32 @@ function PlayGrid() {
     const previous = () => {
         setGridList([[[-1, -1], [15, -1], [4, -1]], [[-1, 11], [8, 0], [3, 0]], [[-1, 8], [7, 0], [1, 0]]])
     }
+
+    const testreal = async () => {
+
+        if (!testing) {
+            let size = 3;
+            const { data, error } = await supabase
+                .from('grids')
+                .select('*')
+                .eq('size', size);
+            if (error) {
+                console.error('Error retrieving grids with size 3:', error);
+            } else {
+                setGridList(data[0].grid);
+                console.log('Grids with size 3:', data);
+            }
+        }
+        setTesting(!testing)
+
+    }
+
+    const add = async () => {
+
+        console.log("works")
+
+    }
+
     return (
         <section className='playPage'>
             <ul className='playPage__buttons'><li className='playPage__button' onClick={previous}>previous</li> <li className='playPage__button' onClick={next}>next</li></ul>
@@ -71,6 +92,9 @@ function PlayGrid() {
                 <button className={`solution ${solution && "solution--active"}`} onClick={() => setSolution(!solution)}>Solution</button>
                 <div className='grid-select'><button onClick={three}>3x3</button><button onClick={five}>5x5</button><button onClick={seven}>7x7</button></div>
             </div>
+            <button className={`solution ${testing && "solution--active"}`} onClick={testreal}>Testing</button>
+            <button className={`solution`} onClick={add}>Add</button>
+
         </section >
     );
 }

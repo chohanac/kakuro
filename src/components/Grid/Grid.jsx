@@ -56,8 +56,6 @@ function Grid({ gridList, solution }) {
         setGrid(newGrid);
         gridInfo.current = newGrid;
         setSelectedCell(null);
-
-
     };
     const clearGrid = () => {
         const newGrid = makeGrid(gridSize)
@@ -591,7 +589,6 @@ function Grid({ gridList, solution }) {
                                             {i}
                                         </div>
                                     ))
-
                                 }
                             </div>
                             {
@@ -608,7 +605,6 @@ function Grid({ gridList, solution }) {
 
                                     </div>
                                 ))
-
                             }
                         </div>
                     ))}</div>))}
