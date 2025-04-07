@@ -4,7 +4,7 @@ import Header from './components/Header/Header';
 import CreateGrid from './pages/CreateGrid/CreateGrid';
 import PlayGrid from './pages/PlayGrid/PlayGrid';
 import Instructions from './pages/Instructions/Instructions';
-import './app.scss'
+import './App.scss'
 function App() {
     return (
         <BrowserRouter>
