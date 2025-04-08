@@ -5,7 +5,9 @@ const Header = () => {
     return (
         <nav className="header">
             <NavLink to="/">
-                <h3>Cross Sums</h3>
+                <div className="kakuro-logo">
+                    <p>https://kakuro.pages.dev/</p>
+                </div>
             </NavLink>
             <div className="header__links">
                 <NavLink to="/" className="header__link">

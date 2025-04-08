@@ -6,12 +6,16 @@ import PlayGrid from './pages/PlayGrid/PlayGrid';
 import Instructions from './pages/Instructions/Instructions';
 import './app.scss'
 function App() {
+
     return (
         <BrowserRouter>
             <Header />
             <Routes>
                 <Route path='/' element={<PlayGrid />} />
+                <Route path="/:name" element={<PlayGrid />} />
+                <Route path="/grid/:name" element={<PlayGrid gridURL={true} />} />
                 <Route path='/create' element={<CreateGrid />} />
+                <Route path='/grids/:num' element={<CreateGrid />} />
                 <Route path='/instructions' element={<Instructions />} />
             </Routes>
         </BrowserRouter>

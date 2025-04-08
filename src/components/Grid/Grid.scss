@@ -53,7 +53,9 @@
             }
 
             &--target {
-                background-color: orange;
+                user-select: none;
+
+                background-color: rgb(17, 172, 17);
             }
 
             &--grey {
@@ -65,7 +67,7 @@
             }
 
             &--duplicate {
-                background-color: rgb(255, 0, 0);
+                background-color: rgb(233, 74, 74);
             }
 
             &--solved {
@@ -79,7 +81,7 @@
             }
 
             &--unique {
-                background-color: lightblue;
+                background-color: rgb(103, 163, 183);
             }
         }
 
@@ -135,7 +137,7 @@
             background: #a6ff6b;
 
             &--uniqueVertical {
-                background-color: lightcoral;
+                background-color: rgb(132, 198, 220)
             }
 
             &--selected {

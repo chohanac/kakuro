@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './CreateGrid.scss'
+import { supabase } from "../../Supabase";
 function CreateGrid() {
     const [gridSize, setGridSize] = useState(5);
     const [grid, setGrid] = useState(makeGrid(5));
@@ -13,6 +14,8 @@ function CreateGrid() {
     const [cellErrorsVertical, setCellErrorsVertical] = useState([]);
     const [duplicates, setDuplicates] = useState([]);
     const [duplicatesVertical, setDuplicatesVertical] = useState([]);
+    const [entername, setEnterName] = useState('');
+
     useEffect(() => {
 
         const keyDownPress = (e) => {
@@ -269,6 +272,52 @@ function CreateGrid() {
         return
     }
 
+    async function insertData(b) {
+        const { data, error } = await supabase
+            .from('grids')
+            .insert([
+                { grid: b, size: b.length }
+            ]);
+    }
+    async function fetchGrids(size) {
+        const { data, error } = await supabase
+            .from('grids')
+            .select('*')
+            .eq('size', size);
+
+        if (error) {
+            console.error('Error retrieving grids with size 3:', error);
+        } else {
+            setGridList(data[0].grid);
+        }
+    }
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const { data, error } = await supabase
+            .from('grids')
+            .select('name')
+            .eq('name', entername)
+        if (data.length === 0) {
+
+            const { data, error } = await supabase
+                .from('grids')
+                .insert([
+                    { name: entername, grid: JSON.stringify(gridInfo.current), size: gridInfo.current.length }
+                ]);
+            if (error) {
+                console.error(error);
+                return;
+            }
+            // navigate(`/${entername}`);
+        }
+        else {
+            console.log("already exists")
+        }
+    };
+
 
 
 
@@ -338,6 +387,7 @@ function CreateGrid() {
             }
             setGrid(newGrid);
             gridInfo.current = newGrid;
+            // console.log(JSON.stringify(newGrid));
         }
     }
     return (
@@ -404,13 +454,28 @@ function CreateGrid() {
                     <p>Choose grid</p>
                     <button className={`option__button ${gridSize === 3 && "option__button--active"}`} onClick={() => sizeChange(3)}>3x3</button>
                     <button className={`option__button ${gridSize === 5 && "option__button--active"}`} onClick={() => sizeChange(5)}>5x5</button>
-                    <button className={`option__button ${gridSize === 7 && "option__button--active"}`} onClick={() => sizeChange(7)}>7x7</button>
+                    <button className={`option__button ${gridSize === 8 && "option__button--active"}`} onClick={() => sizeChange(7)}>7x7</button>
+                    <button className={`option__button ${gridSize === 10 && "option__button--active"}`} onClick={() => sizeChange(9)}>9x9</button>
                 </div>
-                <button className={`option__button`} onClick={() => clearGrid()}>Submit</button>
-                <button className={`option__button`} onClick={() => clearGrid()}>Clear Grid</button>
+                <button className={`choose__button`} onClick={() => clearGrid()}>Clear Grid</button>
 
             </section>
             <p className={`select-color select-color--hidden`}>Enter a number</p>
+
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Enter a name:
+                    <input
+                        type="text"
+                        value={entername}
+                        onChange={(e) => setEnterName(e.target.value)}
+                        required
+                    />
+                </label>
+                <button type="submit">
+                    Submit
+                </button>
+            </form>
         </div >
     );
 }

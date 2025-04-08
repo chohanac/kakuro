@@ -4,7 +4,10 @@ function Instructions() {
     return (
         <div className="instructions-container">
             <header className="instructions-header">
-                <h1>Cross Sums</h1>
+                <div className='title'>
+                    <h1>Kakuro</h1>
+                    <h4>Cross sums</h4>
+                </div>
                 <h1>How to play</h1>
             </header>
             <section className="instructions">
