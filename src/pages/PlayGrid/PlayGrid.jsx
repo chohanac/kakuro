@@ -1,76 +1,311 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Grid from '../../components/Grid/Grid';
 import './PlayGrid.scss'
-
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from "../../Supabase";
-
-const example = [[[-1, -1], [11, -1], [10, -1], [-1, -1], [-1, -1]], [[-1, 4], [3, 0], [1, 0], [13, -1], [-1, -1]], [[-1, 23], [8, 0], [6, 0], [9, 0], [3, -1]], [[-1, -1], [-1, 6], [3, 0], [1, 0], [2, 0]], [[-1, -1], [-1, -1], [-1, 4], [3, 0], [1, 0]]];
-
-
-function PlayGrid() {
+import defaultGrid from '../../assets/defaultGrid.json';
+function PlayGrid({ gridURL = false }) {
     const [solution, setSolution] = useState(false);
     const [gridList, setGridList] = useState([[[-1, -1], [16, -1], [12, -1]], [[-1, 15], [7, 0], [8, 0]], [[-1, 13], [9, 0], [4, 0]]]);
+    const [realGrid, setRealGrid] = useState(null);
+    const { name } = useParams();
+    const [entername, setEnterName] = useState('');
+    const navigate = useNavigate();
+    const [userGrids, setUserGrids] = useState([]);
+    const [url, setUrl] = useState("");
+    const [twoGrid, setTwoGrid] = useState(1);
+    const location = useLocation();
+    useEffect(() => {
+        setUrl(window.location.href);
+    }, [location]);
+    useEffect(() => {
+        if (!name) {
+            const fetchGrids = async () => {
+                const { data, error } = await supabase
+                    .from('grids')
+                    .select('*')
+                    .order('size', { ascending: true });
 
+                if (error) {
+                    console.error(error);
+                } else {
+                    setUserGrids(data);
+                }
+            };
+            fetchGrids();
+        }
 
-    async function insertData(b) {
-        const { data, error } = await supabase
-            .from('grids')
-            .insert([
-                { grid: b, size: b.length }
-            ]);
+    }, []);
+    const sizeGroups = {
+        3: userGrids.filter((grid) => grid.size === 3),
+        5: userGrids.filter((grid) => grid.size === 5),
+        7: userGrids.filter((grid) => grid.size === 7),
+        9: userGrids.filter((grid) => grid.size === 9),
+    };
+    function clearGrid(grid) {
+        const newGrid = grid.map(row =>
+            row.map(cell =>
+                cell[1] === 0 ? [-1, 0] : [...cell]
+            )
+        );
+        return newGrid;
+
     }
+    const handleSubmit = async (e) => {
+        console.log("test")
+        e.preventDefault();
+        const { data, error } = await supabase
+            .from('gridrealtime')
+            .select('name')
+            .eq('name', entername)
+        if (data.length === 0) {
+            const { data, error } = await supabase
+                .from('gridrealtime')
+                .insert([{
+                    name: entername,
+                    gridsolution: JSON.stringify(gridList),
+                    gridedit: JSON.stringify(clearGrid(gridList))
+                }]);
+            if (error) {
+                console.error(error);
+                return;
+            }
+            console.log("testtest")
+            navigate(`/${entername}`);
+            window.location.reload();
 
-    async function fetchGrids(size) {
+
+        }
+    };
+    useEffect(() => {
+        if (name && !gridURL) {
+            access();
+        }
+        else if (gridURL && !isNaN(name) && parseInt(name) > 6 && parseInt(name) <= 20) {
+            const makeNewGrid = defaultGrid.find(obj => obj.number === parseInt(name));
+            setGridList(makeNewGrid.grid);
+        }
+        else if (gridURL) {
+            getUserGrid();
+        }
+        else if (!name) {
+            const makeNewGrid = defaultGrid.find(obj => obj.number === 1);
+            setGridList(makeNewGrid.grid);
+        }
+
+    }, []);
+
+    const getUserGrid = async (str) => {
         const { data, error } = await supabase
             .from('grids')
             .select('*')
-            .eq('size', size);
-
+            .eq('name', str)
+            .single();
         if (error) {
-            console.error('Error retrieving grids with size 3:', error);
+            console.error(error);
         } else {
-            setGridList(data[0].grid);
-            console.log('Grids with size 3:', data);
+            console.log("check")
+
+            setGridList(JSON.parse(data.grid));
+            navigate(`/grid/${str}`);
+
         }
     }
 
 
-    useEffect(() => {
-        fetchGrids();
-
-    }, []);
-
-
-
-
-    const three = () => {
-
-        fetchGrids(3);
-
-    }
     const five = () => {
-        // setGridList([[[-1, -1], [11, -1], [10, -1], [-1, -1], [-1, -1]], [[-1, 4], [3, 0], [1, 0], [13, -1], [-1, -1]], [[-1, 23], [8, 0], [6, 0], [9, 0], [3, -1]], [[-1, -1], [-1, 6], [3, 0], [1, 0], [2, 0]], [[-1, -1], [-1, -1], [-1, 4], [3, 0], [1, 0]]])
-        fetchGrids(5);
-
+        navigate(`/grid/6`);
+        const makeNewGrid = defaultGrid.find(obj => obj.number === parseInt(6));
+        setGridList(makeNewGrid.grid);
     }
     const seven = () => {
-        // setGridList([[[-1, -1], [3, -1], [4, -1], [24, -1], [-1, -1], [11, -1], [16, -1]], [[-1, 10], [1, 0], [3, 0], [6, 0], [-1, 8], [1, 0], [7, 0]], [[-1, 11], [2, 0], [1, 0], [8, 0], [10, 11], [2, 0], [9, 0]], [[-1, -1], [-1, -1], [19, 21], [9, 0], [4, 0], [8, 0], [-1, -1]], [[-1, -1], [9, 6], [2, 0], [1, 0], [3, 0], [4, -1], [17, -1]], [[-1, 10], [2, 0], [8, 0], [-1, 13], [1, 0], [3, 0], [9, 0]], [[-1, 16], [7, 0], [9, 0], [-1, 11], [2, 0], [1, 0], [8, 0]]])
-        fetchGrids(7);
+        navigate(`/grid/11`);
+        const makeNewGrid = defaultGrid.find(obj => obj.number === parseInt(11));
+        setGridList(makeNewGrid.grid);
+    }
+    const nine = () => {
+        navigate(`/grid/16`);
+        const makeNewGrid = defaultGrid.find(obj => obj.number === parseInt(16));
+        setGridList(makeNewGrid.grid);
     }
     const next = () => {
-        setGridList([[[-1, -1], [12, -1], [3, -1]], [[-1, 11], [9, 0], [2, 0]], [[-1, 4], [3, 0], [1, 0]]])
+        if (gridURL && !isNaN(name) && parseInt(name) >= 6 && parseInt(name) <= 20) {
+            if (parseInt(name) === 10) {
+                navigate(`/grid/6`);
+                const makeNewGrid = defaultGrid.find(obj => obj.number === 6);
+                setGridList(makeNewGrid.grid);
+
+            }
+            else if ((parseInt(name) === 15)) {
+                navigate(`/grid/11`);
+
+                const makeNewGrid = defaultGrid.find(obj => obj.number === 11);
+                setGridList(makeNewGrid.grid);
+
+            }
+            else if ((parseInt(name) === 20)) {
+                navigate(`/grid/16`);
+
+                const makeNewGrid = defaultGrid.find(obj => obj.number === 16);
+                setGridList(makeNewGrid.grid);
+
+            }
+            else {
+                navigate(`/grid/${parseInt(name) + 1}`);
+                const makeNewGrid = defaultGrid.find(obj => obj.number === parseInt(name) + 1);
+                setGridList(makeNewGrid.grid);
+            }
+
+        }
+        else {
+            if (twoGrid < 5) {
+                const makeNewGrid = defaultGrid.find(obj => obj.number === twoGrid + 1);
+                setTwoGrid(prev => twoGrid + 1);
+                setGridList(makeNewGrid.grid);
+            }
+            else {
+                const makeNewGrid = defaultGrid.find(obj => obj.number === 1);
+                setTwoGrid(prev => 1);
+                setGridList(makeNewGrid.grid);
+            }
+        }
     }
     const previous = () => {
-        setGridList([[[-1, -1], [15, -1], [4, -1]], [[-1, 11], [8, 0], [3, 0]], [[-1, 8], [7, 0], [1, 0]]])
+        if (gridURL && !isNaN(name) && parseInt(name) >= 6 && parseInt(name) <= 20) {
+            if (parseInt(name) === 6) {
+                navigate(`/grid/10`);
+                const makeNewGrid = defaultGrid.find(obj => obj.number === 10);
+                setGridList(makeNewGrid.grid);
+
+            }
+            else if ((parseInt(name) === 11)) {
+                navigate(`/grid/15`);
+
+                const makeNewGrid = defaultGrid.find(obj => obj.number === 15);
+                setGridList(makeNewGrid.grid);
+
+            }
+            else if ((parseInt(name) === 16)) {
+                navigate(`/grid/20`);
+
+                const makeNewGrid = defaultGrid.find(obj => obj.number === 20);
+                setGridList(makeNewGrid.grid);
+
+            }
+            else {
+                navigate(`/grid/${parseInt(name) - 1}`);
+                const makeNewGrid = defaultGrid.find(obj => obj.number === parseInt(name) - 1);
+                setGridList(makeNewGrid.grid);
+            }
+        }
+        else {
+            if (twoGrid > 1) {
+                const makeNewGrid = defaultGrid.find(obj => obj.number === twoGrid - 1);
+                setTwoGrid(prev => twoGrid - 1);
+                setGridList(makeNewGrid.grid);
+            }
+            else {
+                const makeNewGrid = defaultGrid.find(obj => obj.number === 5);
+                setTwoGrid(prev => 5);
+                setGridList(makeNewGrid.grid);
+            }
+        }
+    }
+    const access = async () => {
+        const { data, error } = await supabase
+            .from('gridrealtime')
+            .select('gridsolution, gridedit')
+            .eq('name', name);
+        if (error) {
+            console.error('Error fetching data:', error);
+        } else {
+            data[0].name = name;
+            data[0].gridsolution = JSON.parse(data[0].gridsolution);
+            data[0].gridedit = JSON.parse(data[0].gridedit);
+            setGridList(data[0].gridsolution)
+            setRealGrid(data[0])
+        }
     }
     return (
         <section className='playPage'>
             <ul className='playPage__buttons'><li className='playPage__button' onClick={previous}>previous</li> <li className='playPage__button' onClick={next}>next</li></ul>
-            <Grid gridList={gridList} solution={solution} />
+            {name && !gridURL &&
+                <div><p>Share this link to play with others in real time</p><p>{url}</p></div>}
+            <div className={`main-grid ${gridList.length === 3 && "main-grid--three"} ${gridList.length === 5 && "main-grid--five"}    ${gridList.length === 7 && "main-grid--seven"} ${gridList.length === 9 && "main-grid--nine"} `}>
+                <Grid gridList={gridList} solution={solution} realGrid={realGrid} />
+            </div>
+            <div className='group-container'></div>
             <div className='group'>
                 <button className={`solution ${solution && "solution--active"}`} onClick={() => setSolution(!solution)}>Solution</button>
-                <div className='grid-select'><button onClick={three}>3x3</button><button onClick={five}>5x5</button><button onClick={seven}>7x7</button></div>
+
+                <div className='grid-select'><button onClick={five}>5x5</button><button onClick={seven}>7x7</button><button onClick={nine}>9x9</button></div>
             </div>
+
+
+            {!(name && !gridURL) &&
+                <div className='playgrid-form'>
+                    <form onSubmit={handleSubmit}>
+                        <p>Play Online</p>
+                        <label className='form__name'>
+                            Enter a name:
+                            <input
+                                type="text"
+                                value={entername}
+                                onChange={(e) => setEnterName(e.target.value)}
+                                required
+                            />
+                        </label>
+                        <button type="submit">
+                            Submit
+                        </button>
+                    </form>
+                </div>}
+
+            {!name &&
+                <section>
+                    <div>
+                        <h1>User Grids</h1>
+                        <div className='user-grid'>
+                            <div>
+                                <h2>3X3</h2>
+                                {sizeGroups[3].map((grid) => (
+                                    <div key={grid.id}>
+                                        <button onClick={() => getUserGrid(grid.name)}>{grid.name}</button>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className='user-grid__border'></div>
+                            <div>
+                                <h2>5X5</h2>
+                                {sizeGroups[5].map((grid) => (
+                                    <div key={grid.id}>
+                                        <button onClick={() => getUserGrid(grid.name)}>{grid.name}</button>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className='user-grid__border'></div>
+                            <div>
+                                <h2>7X7</h2>
+                                {sizeGroups[7].map((grid) => (
+                                    <div key={grid.id}>
+                                        <button onClick={() => getUserGrid(grid.name)}>{grid.name}</button>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className='user-grid__border'></div>
+
+                            <div>
+                                <h2>9X9</h2>
+                                {sizeGroups[9].map((grid) => (
+                                    <div key={grid.id}>
+                                        <button>{grid.name}</button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
         </section >
     );
 }

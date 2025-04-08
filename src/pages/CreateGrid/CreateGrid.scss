@@ -16,6 +16,8 @@
     gap: 50px;
 }
 
+
+
 .grid {
     &__container {
         display: flex;
@@ -104,7 +106,7 @@
 
     &__triangle-number {
         position: absolute;
-        top: 65%; // Adjusted for visual centering in triangle
+        top: 65%;
         left: 30%;
         transform: translate(-50%, -50%);
         cursor: default;
@@ -184,16 +186,31 @@
         }
     }
 
-    .option {
-        &__button {
-            &--active {
-                border-color: black;
-            }
+
+}
+
+.options {
+
+    // display: flex;
+    // flex-direction: column;
+    gap: 10px;
+
+    button {
+        border: 2px solid black;
+    }
+
+    &__button {
+        border: 2px solid black;
+
+        &--active {
+            border-color: black;
         }
     }
 }
 
 .select {
+    margin-top: 50px;
+
     &__container {
         display: flex;
         gap: 1rem;
@@ -229,6 +246,14 @@
     flex-direction: column;
     gap: 20px;
     width: 200px;
+    background-color: rgb(208, 246, 212);
+    border-radius: 10px;
+    padding: 1rem;
+
+    button {
+        border: 1px solid black;
+
+    }
 }
 
 .select-color {

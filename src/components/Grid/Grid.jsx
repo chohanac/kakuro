@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import './Grid.scss'
 import { CalculationInterpolation } from 'sass';
-function Grid({ gridList, solution }) {
+import { supabase } from "../../Supabase";
+function Grid({ gridList, solution, realGrid }) {
     const [gridSize, setGridSize] = useState(5);
     const [grid, setGrid] = useState(makeGrid());
     const [selectedColor, setSelectedColor] = useState(true);
@@ -17,6 +17,8 @@ function Grid({ gridList, solution }) {
     const [duplicatesVertical, setDuplicatesVertical] = useState([]);
     const [solved, setSolved] = useState(false);
     const [hoverCell, setHoverCell] = useState(null);
+    const [shouldRerender, setShouldRerender] = useState(false);
+    const [mount, setMount] = useState(false);
     const unique = { 3: [{ 2: 12 }], 4: [{ 2: 13 }], 6: [{ 3: 123 }], 7: [{ 3: 124 }], 10: [{ 4: 1234 }], 11: [{ 4: 1235 }], 15: [{ 5: 12345 }], 16: [{ 2: 79 }, { 5: 12346 }], 17: [{ 2: 89 }], 21: [{ 6: 123456 }], 22: [{ 6: 123457 }], 23: [{ 3: 689 }], 24: [{ 3: 789 }], 28: [{ 7: 1234567 }], 29: [{ 4: 5789 }, { 7: 1234568 }], 30: [{ 4: 6789 }], 34: [{ 5: 46789 }], 35: [{ 5: 56789 }], 36: [{ 8: 12345678 }], 37: [{ 8: 12345679 }], 38: [{ 6: 356789 }, { 8: 12345689 }], 39: [{ 6: 456789 }, { 8: 12345789 }], 40: [{ 8: 12346789 }], 41: [{ 7: 2456789 }, { 8: 12356789 }], 42: [{ 7: 3456789 }, { 8: 12456789 }], 43: [{ 8: 13456789 }], 44: [{ 8: 23456789 }], 45: [{ 9: 123456789 }] };
     useEffect(() => {
         clearGrid()
@@ -29,7 +31,110 @@ function Grid({ gridList, solution }) {
             setGrid(gridInfo.current);
         }
     }, [solution]);
+    const setMistakes = () => {
+        const editgrid = realGrid.gridedit;
+        let cellErrorArray = [...cellErrors];
+        let duplicateArray = [...duplicates];
+        let cellErrorArrayVertical = [...cellErrorsVertical];
+        let duplicateArrayVertical = [...duplicatesVertical];
+        const errorHandle = (arr, i, j, vertical = false) => {
+            let target = editgrid[i][j][0];
+            if (vertical) {
+                target = editgrid[i][j][1];
+            }
+            const hasEmptyCell = arr.some(item => item[0] === -1);
+            if (!hasEmptyCell) {
+                let countNum = arr.reduce((acc, item) => acc + item[0], 0);
+                if (countNum !== target) {
+                    arr.forEach(item => {
+                        if (vertical) {
+                            cellErrorArrayVertical.push([item[1], item[2]])
+                        }
+                        else {
+                            cellErrorArray.push([item[1], item[2]])
+                        }
+                    });
+                }
+            }
+            const firstElementCheck = {};
+            arr.forEach(item => {
+                const firstElement = item[0];
+                firstElementCheck[firstElement] = (firstElementCheck[firstElement] || 0) + 1;
+            });
+            const loggedPairs = {};
+            arr.forEach(item => {
+                const firstElement = item[0];
+                const pair = `${item[1]},${item[2]}`;
+                if (firstElementCheck[firstElement] > 1) {
+                    if (!loggedPairs[firstElement]) {
+                        loggedPairs[firstElement] = new Set();
+                    }
+                    if (!loggedPairs[firstElement].has(pair) && editgrid[item[1]][item[2]][0] !== -1) {
+                        if (vertical) {
+                            (grid[item[1], item[2]])
+                            duplicateArrayVertical.push([item[1], item[2]]);
+                        }
+                        else {
+                            duplicateArray.push([item[1], item[2]]);
+                        }
+                        loggedPairs[firstElement].add(pair);
+                    }
+                }
+            });
+        }
+        for (let i = 0; i < editgrid.length; i++) {
+            for (let j = 0; j < editgrid[i].length; j++) {
+                if (editgrid[i][j][1] !== 0) {
+                    if (editgrid[i][j][0] !== -1) {
+                        let length = editgrid.length;
+                        let arr = [];
+                        for (let m = i + 1; m < editgrid.length; m++) {
+                            if (editgrid[m][j][1] === 0) {
+                                arr.push([editgrid[m][j][0], m, j]);
+                            }
+                            else {
+                                break
+                            }
+                        }
+                        errorHandle(arr, i, j)
+                    }
+                }
+            }
+        }
+        for (let i = 0; i < editgrid.length; i++) {
+            for (let j = 0; j < editgrid[i].length; j++) {
+                if (editgrid[i][j][1] !== 0) {
+                    if (editgrid[i][j][1] !== -1) {
+                        let length = editgrid.length;
+                        let arr = [];
+                        for (let m = j + 1; m < editgrid.length; m++) {
+                            if (editgrid[i][m][1] === 0) {
+                                arr.push([editgrid[i][m][0], i, m]);
+                            }
+                            else {
+                                break
+                            }
+                        }
+                        errorHandle(arr, i, j, true)
+                    }
+                }
+            }
+        }
+        setDuplicates(duplicateArray);
+        setCellErrors(cellErrorArray);
+        setDuplicatesVertical(duplicateArrayVertical);
+        setCellErrorsVertical(cellErrorArrayVertical);
+    }
+    useEffect(() => {
+        if (realGrid && realGrid.gridedit && !mount) {
+            setMistakes();
+            setMount(true)
+        }
+    }, [realGrid]);
     function makeGrid() {
+        if (realGrid) {
+            return realGrid.gridedit;
+        }
         const size = gridList.length
         let grid = [];
         let row = [];
@@ -50,14 +155,117 @@ function Grid({ gridList, solution }) {
         );
         return blankGrid;
     };
+    function compareGrids(grid1, grid2) {
+        const differences = [];
+
+        for (let i = 0; i < grid1.length; i++) {
+            for (let j = 0; j < grid1[i].length; j++) {
+                for (let k = 0; k < grid1[i][j].length; k++) {
+                    if (grid1[i][j][k] !== grid2[i][j][k]) {
+                        differences.push(i, j);
+                    }
+                }
+            }
+        }
+        return differences;
+    }
+    function gridChanges(name) {
+        const channel = supabase
+            .channel('grid-changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'gridrealtime',
+                    filter: `name=eq.${name}`,
+                },
+                (payload) => {
+                    const info = payload.new.gridedit;
+                    const difference = compareGrids(info, gridInfo.current);
+                    if (difference.length !== 0) {
+                        checkMistakes(info, { row: difference[0], col: difference[1], triangle: false })
+                        checkMistakes(info, { row: difference[0], col: difference[1], triangle: false }, true)
+                    }
+                    setGrid(info)
+                    gridInfo.current = info;
+                    if (checkSolution(gridInfo.current, gridList)) {
+                        setSolved(true);
+                    }
+                    else {
+                        setSolved(false);
+                    }
+                }
+            )
+            .subscribe();
+        channel.on('subscribed', () => {
+        });
+        channel.on('CHANNEL_ERROR', (error) => {
+            console.error(error);
+        });
+        channel.on('RECONNECTING', () => {
+            console.log('reconnecting');
+        });
+        channel.on('RECONNECTED', () => {
+            console.log('reconnected');
+        });
+        channel.on('CLOSED', () => {
+            console.log('closed');
+        });
+    }
+    if (realGrid) {
+        gridChanges(realGrid.name);
+    }
+    async function updateGridEdit(name, gridData) {
+        const serializedData = JSON.stringify(gridData);
+        const { data, error } = await supabase
+            .from('gridrealtime')
+            .update({ gridedit: serializedData })
+            .eq('name', name);
+
+        if (error) {
+            console.error('Error updating gridEdit:', error);
+        }
+        const channel = supabase
+            .channel('schema-db-changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'gridrealtime',
+                    filter: `name=eq.${name}`,
+                },
+                (payload) => {
+                }
+            )
+            .subscribe();
+        channel.on('SUBSCRIBED', () => {
+            console.log("subscribe");
+        });
+
+        channel.on('CHANNEL_ERROR', (error) => {
+            console.error(error);
+        });
+
+        channel.on('RECONNECTING', () => {
+            console.log("reconnect");
+        });
+
+        channel.on('RECONNECTED', () => {
+            console.log("reconnect");
+        });
+
+        channel.on('CLOSED', () => {
+            console.log("close");
+        });
+    }
     const sizeChange = (size) => {
         setGridSize(size);
         const newGrid = makeGrid(size);
         setGrid(newGrid);
         gridInfo.current = newGrid;
         setSelectedCell(null);
-
-
     };
     const clearGrid = () => {
         const newGrid = makeGrid(gridSize)
@@ -134,7 +342,6 @@ function Grid({ gridList, solution }) {
             newGrid[row][col][1] = 0;
             newGrid[row][col][0] = -1;
         }
-
         else if (newGrid[row][col][1] === 0 && !selectedColor) {
             newGrid[row][col][0] = -1;
             newGrid[row][col][1] = -1;
@@ -146,7 +353,6 @@ function Grid({ gridList, solution }) {
         if (arr1.length !== arr2.length) {
             return false;
         }
-
         for (let i = 0; i < arr1.length; i++) {
             if (Array.isArray(arr1[i]) && Array.isArray(arr2[i])) {
                 if (!checkSolution(arr1[i], arr2[i])) {
@@ -177,6 +383,10 @@ function Grid({ gridList, solution }) {
         const cells = [];
         let duplicateArray = [...duplicates];
         let cellErrorArray = [...cellErrors];
+        if (vertical) {
+            duplicateArray = [...duplicatesVertical];
+            cellErrorArray = [...cellErrorsVertical];
+        }
         let count = 0;
         let value = -1;
         function loop(start, condition, step) {
@@ -189,7 +399,6 @@ function Grid({ gridList, solution }) {
                     return vertical ? !(item[0] === selected.row && item[1] === i) : !(item[0] === i && item[1] === selected.col);
                 });
                 if (cell[1] !== 0) {
-
                     if (value === -1) {
                         value = vertical ? cell[1] : cell[0];
                     }
@@ -212,6 +421,12 @@ function Grid({ gridList, solution }) {
             duplicateArray.push([i[0], i[1]]);
         }
         )
+        if (grid[selected.row][selected.col][1] === 0 && grid[selected.row][selected.col][0] === -1) {
+            duplicateArray = duplicateArray.filter((item) => {
+                return !(item[0] === selected.row && item[1] === selected.col);
+            });
+            err = false;
+        }
         if (value === -1 || count === value) {
             err = false
         }
@@ -243,14 +458,12 @@ function Grid({ gridList, solution }) {
             setDuplicates(duplicateArray);
             setCellErrors(cellErrorArray);
         }
-
     }
     const gridKeyPress = (e) => {
         if (solution) {
             return
         }
         e.stopPropagation();
-
         const newGrid = gridInfo.current.map(row =>
             [...row].map(cell =>
                 [...cell]
@@ -268,7 +481,6 @@ function Grid({ gridList, solution }) {
                 key = -1;
                 checkMistakes(newGrid, selectedCell);
                 checkMistakes(newGrid, selectedCell, true);
-
             }
             if (newGrid[selectedCell.row][selectedCell.col][1] === 0) {
                 newGrid[selectedCell.row][selectedCell.col][0] = key;
@@ -311,13 +523,15 @@ function Grid({ gridList, solution }) {
             }
             setGrid(newGrid);
             gridInfo.current = newGrid;
+            if (realGrid) {
+                updateGridEdit(realGrid.name, gridInfo.current);
+            }
             if (checkSolution(gridInfo.current, gridList)) {
                 setSolved(true);
             }
             else {
                 setSolved(false);
             }
-
         }
     }
     const checkUnique = (row, col) => {
@@ -396,7 +610,6 @@ function Grid({ gridList, solution }) {
                             }
                         }
                     }
-
                 }
                 if (checkUnique(hoverCell.row, hoverCell.col)[1] !== -1) {
                     length = grid.length
@@ -413,7 +626,6 @@ function Grid({ gridList, solution }) {
                             }
                         }
                     }
-
                 }
             }
         }
@@ -431,7 +643,6 @@ function Grid({ gridList, solution }) {
     };
     const cellNumberClasses = (row, col) => {
         const classes = ['grid__cell-number'];
-
         if (grid[row][col][1] === 0) {
             classes.push('grid__cell-number--center');
             if (grid[row][col][0] === -1) {
@@ -440,7 +651,6 @@ function Grid({ gridList, solution }) {
         } else if (grid[row][col][1] !== 0 && grid[row][col][0] === -1) {
             classes.push('grid__cell-number--hidden');
         }
-
         if (selectedCell !== null && selectedCell.row === row && selectedCell.col === col && selectedCell.triangle === false) {
             classes.push('grid__cell-number--selected');
             if (gridInfo.current[row][col][1] === 0) {
@@ -458,36 +668,28 @@ function Grid({ gridList, solution }) {
         if (selectedCell !== null && selectedCell.row === row && selectedCell.col === col && selectedCell.triangle === true) {
             classes.push('grid__triangle--selected');
         }
-
         if (grid[row][col][1] === 0) {
             classes.push('grid__triangle--hidden');
         }
-
         if (grid.length === col + 1) {
             classes.push('grid__triangle--grey');
         }
-
         if (checkUnique(row, col)[1] !== -1) {
             classes.push('grid__triangle--uniqueVertical')
         }
-
         return classes.join(' ');
     };
     const RightArrowClasses = (row, col) => {
         const classes = ['grid__arrow-right'];
-
         if (grid[row][col][1] === 0 || grid[row][col][0] === -1) {
             classes.push('grid__arrow-right--hidden');
         }
-
         if (grid[0].length === row + 1) {
             classes.push('grid__arrow-right--hidden');
         }
-
         if (selectedCell !== null && selectedCell.row === row && selectedCell.col === col && selectedCell.triangle === false) {
             classes.push('grid__arrow-right--selected');
         }
-
         return classes.join(' ');
     };
     const TriangleNumberClasses = (row, col) => {
@@ -523,7 +725,7 @@ function Grid({ gridList, solution }) {
         setHoverCell(null)
     };
     return (
-        <div className='gridPage'>
+        <div className='gridPage' >
             <section className='grid'>
                 <div className='grid__container'>
                     {grid.map((row, rowIndex) => (<div key={rowIndex} className='grid__row'>{row.map((cell, cellIndex) => (
@@ -580,7 +782,6 @@ function Grid({ gridList, solution }) {
                                 {
                                     checkUnique(rowIndex, cellIndex)[0] !== -1 && grid[rowIndex][cellIndex][1] !== 0 && checkUnique(rowIndex, cellIndex)[0].toString().split("").map((i, index) => (
                                         <div
-
                                             key={index}
                                             className={`grid__cell grid__unique-cell ${hoverCell?.row === rowIndex && hoverCell?.col === cellIndex && hoverCell?.triangle && hoverCell?.bounds && "grid__unique-cell--show"}`}
                                             style={{
@@ -591,7 +792,6 @@ function Grid({ gridList, solution }) {
                                             {i}
                                         </div>
                                     ))
-
                                 }
                             </div>
                             {
@@ -605,16 +805,13 @@ function Grid({ gridList, solution }) {
                                         }}
                                     >
                                         {i}
-
                                     </div>
                                 ))
-
                             }
                         </div>
                     ))}</div>))}
                 </div>
             </section >
-
         </div >
     );
 }
