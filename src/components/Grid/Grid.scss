@@ -35,7 +35,7 @@
             }
 
             &--selected {
-                border-color: rgb(45, 45, 218);
+                border-color: rgb(45, 134, 218);
                 border-width: 4px;
             }
 
@@ -56,10 +56,6 @@
                 user-select: none;
 
                 background-color: rgb(17, 172, 17);
-            }
-
-            &--grey {
-                background-color: gray;
             }
 
             &--errors {
@@ -142,10 +138,6 @@
 
             &--selected {
                 background-color: blue;
-            }
-
-            &--grey {
-                background-color: rgb(117, 117, 117);
             }
 
             &--hidden {

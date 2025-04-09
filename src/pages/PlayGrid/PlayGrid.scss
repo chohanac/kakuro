@@ -43,11 +43,7 @@
         &--hide {
             visibility: hidden;
         }
-
-
     }
-
-
 
     .group {
         display: flex;
@@ -67,8 +63,6 @@
 
 }
 
-
-
 .user-grid {
     display: flex;
     gap: 3rem;
@@ -86,10 +80,6 @@
 
 .main-grid {
     margin-top: 2rem;
-
-    &--three {
-        // background-color: orange;
-    }
 
     &--five {
         margin-top: 4rem;
@@ -116,8 +106,6 @@ form {
     input {
         margin-left: 1rem;
     }
-
-
 }
 
 .playgrid-form {
