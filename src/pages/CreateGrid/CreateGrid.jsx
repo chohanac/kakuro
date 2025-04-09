@@ -459,7 +459,7 @@ function CreateGrid() {
                 </div>
                 <section className='choose'>
                     <div className='options'>
-                        <p>Choose grid</p>
+                        <p>Choose Grid</p>
                         <button className={`option__button ${gridSize === 3 && "option__button--active"}`} onClick={() => sizeChange(3)}>3x3</button>
                         <button className={`option__button ${gridSize === 5 && "option__button--active"}`} onClick={() => sizeChange(5)}>5x5</button>
                         <button className={`option__button ${gridSize === 8 && "option__button--active"}`} onClick={() => sizeChange(7)}>7x7</button>

@@ -14,23 +14,23 @@
         }
     }
 
-    &__button {
-        cursor: pointer;
-        background-color: lightgreen;
-        padding: 0.5rem;
-        width: 6.25rem;
-        border-radius: 0.5rem;
-        border: 1px solid black;
+    // &__button {
+    //     cursor: pointer;
+    //     background-color: lightgreen;
+    //     padding: 0.5rem;
+    //     width: 6.25rem;
+    //     border-radius: 0.5rem;
+    //     border: 1px solid black;
 
-        &:hover {
-            background-color: rgb(177, 233, 177);
-        }
+    //     &:hover {
+    //         background-color: rgb(177, 233, 177);
+    //     }
 
-        &:active {
-            border: 3px solid black;
-        }
+    //     &:active {
+    //         border: 3px solid black;
+    //     }
 
-    }
+    // }
 
     .grid-select {
         display: flex;

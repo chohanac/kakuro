@@ -220,7 +220,7 @@ function PlayGrid({ gridURL = false }) {
     }
     return (
         <section className='playPage'>
-            <ul className={`playPage__buttons ${((name && !gridURL) || (gridURL && !(!isNaN(name) && parseInt(name) > 6 && parseInt(name) <= 20))) && "playPage__buttons--hide"}`}><li className={`playPage__button`} onClick={previous}>Previous</li> <li className={`playPage__button`} onClick={next}>Next</li></ul>
+            <ul className={`playPage__buttons ${((name && !gridURL) || (gridURL && !(!isNaN(name) && parseInt(name) > 6 && parseInt(name) <= 20))) && "playPage__buttons--hide"}`}><li className={`playPage__button`} onClick={previous}><button>Previous</button></li> <li className={`playPage__button`} onClick={next}><button>Next</button></li></ul>
             {name && !gridURL &&
                 <div><p>Share this link to play with others in real time</p><p>{url}</p></div>}
             <div className={`main-grid ${gridList.length === 3 && "main-grid--three"} ${gridList.length === 5 && "main-grid--five"}    ${gridList.length === 7 && "main-grid--seven"} ${gridList.length === 9 && "main-grid--nine"} `}>
