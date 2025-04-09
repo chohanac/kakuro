@@ -307,11 +307,11 @@ function CreateGrid() {
                 .insert([
                     { name: entername, grid: JSON.stringify(gridInfo.current), size: gridInfo.current.length }
                 ]);
+            setEnterName("")
             if (error) {
                 console.error(error);
                 return;
             }
-            // navigate(`/${entername}`);
         }
         else {
             console.log("already exists")
