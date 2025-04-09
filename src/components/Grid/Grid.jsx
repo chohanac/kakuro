@@ -21,6 +21,7 @@ function Grid({ gridList, solution, realGrid }) {
     const [mount, setMount] = useState(false);
     const unique = { 3: [{ 2: 12 }], 4: [{ 2: 13 }], 6: [{ 3: 123 }], 7: [{ 3: 124 }], 10: [{ 4: 1234 }], 11: [{ 4: 1235 }], 15: [{ 5: 12345 }], 16: [{ 2: 79 }, { 5: 12346 }], 17: [{ 2: 89 }], 21: [{ 6: 123456 }], 22: [{ 6: 123457 }], 23: [{ 3: 689 }], 24: [{ 3: 789 }], 28: [{ 7: 1234567 }], 29: [{ 4: 5789 }, { 7: 1234568 }], 30: [{ 4: 6789 }], 34: [{ 5: 46789 }], 35: [{ 5: 56789 }], 36: [{ 8: 12345678 }], 37: [{ 8: 12345679 }], 38: [{ 6: 356789 }, { 8: 12345689 }], 39: [{ 6: 456789 }, { 8: 12345789 }], 40: [{ 8: 12346789 }], 41: [{ 7: 2456789 }, { 8: 12356789 }], 42: [{ 7: 3456789 }, { 8: 12456789 }], 43: [{ 8: 13456789 }], 44: [{ 8: 23456789 }], 45: [{ 9: 123456789 }] };
     useEffect(() => {
+        setSolved(false);
         clearGrid()
     }, [gridList]);
     useEffect(() => {
@@ -190,6 +191,7 @@ function Grid({ gridList, solution, realGrid }) {
                     setGrid(info)
                     gridInfo.current = info;
                     if (checkSolution(gridInfo.current, gridList)) {
+                        setSelectedCell(null);
                         setSolved(true);
                     }
                     else {
@@ -726,7 +728,7 @@ function Grid({ gridList, solution, realGrid }) {
     };
     return (
         <div className='gridPage' >
-            <section className='grid'>
+            <section className={`grid ${solved && "grid--solved"}`}>
                 <div className='grid__container'>
                     {grid.map((row, rowIndex) => (<div key={rowIndex} className='grid__row'>{row.map((cell, cellIndex) => (
                         <div tabIndex="0" onKeyDown={gridKeyPress} key={cellIndex} className={cellClasses(rowIndex, cellIndex)} onClick={(e) => {

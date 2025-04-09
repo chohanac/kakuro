@@ -16,7 +16,9 @@ function PlayGrid({ gridURL = false }) {
     const [twoGrid, setTwoGrid] = useState(1);
     const location = useLocation();
     useEffect(() => {
+        setSolution(false);
         setUrl(window.location.href);
+
         if (!name) {
             const makeNewGrid = defaultGrid.find(obj => obj.number === 1);
             setGridList(makeNewGrid.grid);
@@ -56,7 +58,6 @@ function PlayGrid({ gridURL = false }) {
 
     }
     const handleSubmit = async (e) => {
-        console.log("test")
         e.preventDefault();
         const { data, error } = await supabase
             .from('gridrealtime')
@@ -74,11 +75,8 @@ function PlayGrid({ gridURL = false }) {
                 console.error(error);
                 return;
             }
-            console.log("testtest")
             navigate(`/${entername}`);
             window.location.reload();
-
-
         }
     };
     useEffect(() => {
@@ -92,14 +90,7 @@ function PlayGrid({ gridURL = false }) {
         else if (gridURL) {
             getUserGrid();
         }
-
-
-
-
-
-
     }, []);
-
     const getUserGrid = async (str) => {
         const { data, error } = await supabase
             .from('grids')
@@ -109,8 +100,6 @@ function PlayGrid({ gridURL = false }) {
         if (error) {
             console.error(error);
         } else {
-            console.log("check")
-
             setGridList(JSON.parse(data.grid));
             navigate(`/grid/${str}`);
 
@@ -263,7 +252,6 @@ function PlayGrid({ gridURL = false }) {
                         </button>
                     </form>
                 </div>}
-
             {!name &&
                 <section>
                     <div>
@@ -308,7 +296,11 @@ function PlayGrid({ gridURL = false }) {
                         </div>
                     </div>
                 </section>
+
             }
+            <footer className={`footer footer--home ${name && "footer--hide"}`}>
+                <p>Created by Anas Chohan - <a href="https://www.linkedin.com/in/anas-chohan/">Linkedin</a> - <a href="https://github.com/chohanac">Github</a></p>
+            </footer>
         </section >
     );
 }

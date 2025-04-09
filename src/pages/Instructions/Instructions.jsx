@@ -5,7 +5,7 @@ function Instructions() {
         <div className="instructions-container">
             <header className="instructions-header">
                 <div className='title'>
-                    <h1>Kakuro</h1>
+                    <h2 className='title__kakuro'>Kakuro</h2>
                     <h4>Cross sums</h4>
                 </div>
                 <h1>How to play</h1>
@@ -34,6 +34,9 @@ function Instructions() {
                     </p>
                 </div>
             </section>
+            <footer className="footer">
+                <p>Created by Anas Chohan - <a href="https://www.linkedin.com/in/anas-chohan/">Linkedin</a> - <a href="https://github.com/chohanac">Github</a></p>
+            </footer>
         </div>
     );
 }

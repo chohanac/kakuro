@@ -47,8 +47,11 @@
 
         .active {
             color: white;
-            background-color: rgb(103, 163, 183);
+            background-color: #3498db;
 
+            &:hover {
+                background-color: #3498db;
+            }
         }
     }
 
@@ -61,14 +64,12 @@
         justify-content: center;
 
         &:hover {
-            background-color: #3498db;
-
+            background-color: rgb(103, 163, 183);
         }
 
         @include tablet {
             padding: 0 1rem;
             height: 2.375rem;
-
         }
 
         &:hover {
