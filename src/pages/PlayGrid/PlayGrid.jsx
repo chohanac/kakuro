@@ -17,6 +17,10 @@ function PlayGrid({ gridURL = false }) {
     const location = useLocation();
     useEffect(() => {
         setUrl(window.location.href);
+        if (!name) {
+            const makeNewGrid = defaultGrid.find(obj => obj.number === 1);
+            setGridList(makeNewGrid.grid);
+        }
     }, [location]);
     useEffect(() => {
         if (!name) {
@@ -88,10 +92,11 @@ function PlayGrid({ gridURL = false }) {
         else if (gridURL) {
             getUserGrid();
         }
-        else if (!name) {
-            const makeNewGrid = defaultGrid.find(obj => obj.number === 1);
-            setGridList(makeNewGrid.grid);
-        }
+
+
+
+
+
 
     }, []);
 
@@ -111,8 +116,6 @@ function PlayGrid({ gridURL = false }) {
 
         }
     }
-
-
     const five = () => {
         navigate(`/grid/6`);
         const makeNewGrid = defaultGrid.find(obj => obj.number === parseInt(6));
@@ -228,7 +231,7 @@ function PlayGrid({ gridURL = false }) {
     }
     return (
         <section className='playPage'>
-            <ul className='playPage__buttons'><li className='playPage__button' onClick={previous}>previous</li> <li className='playPage__button' onClick={next}>next</li></ul>
+            <ul className={`playPage__buttons ${((name && !gridURL) || (gridURL && !(!isNaN(name) && parseInt(name) > 6 && parseInt(name) <= 20))) && "playPage__buttons--hide"}`}><li className={`playPage__button`} onClick={previous}>Previous</li> <li className={`playPage__button`} onClick={next}>Next</li></ul>
             {name && !gridURL &&
                 <div><p>Share this link to play with others in real time</p><p>{url}</p></div>}
             <div className={`main-grid ${gridList.length === 3 && "main-grid--three"} ${gridList.length === 5 && "main-grid--five"}    ${gridList.length === 7 && "main-grid--seven"} ${gridList.length === 9 && "main-grid--nine"} `}>
@@ -238,7 +241,7 @@ function PlayGrid({ gridURL = false }) {
             <div className='group'>
                 <button className={`solution ${solution && "solution--active"}`} onClick={() => setSolution(!solution)}>Solution</button>
 
-                <div className='grid-select'><button onClick={five}>5x5</button><button onClick={seven}>7x7</button><button onClick={nine}>9x9</button></div>
+                <div className={`grid-select ${(name && !gridURL) && "grid-select--hide"}`}><button onClick={five}>5x5</button><button onClick={seven}>7x7</button><button onClick={nine}>9x9</button></div>
             </div>
 
 
@@ -246,8 +249,8 @@ function PlayGrid({ gridURL = false }) {
                 <div className='playgrid-form'>
                     <form onSubmit={handleSubmit}>
                         <p>Play Online</p>
-                        <label className='form__name'>
-                            Enter a name:
+                        <label className='form__name text'>
+                            Enter grid name:
                             <input
                                 type="text"
                                 value={entername}

@@ -193,7 +193,7 @@
 
     // display: flex;
     // flex-direction: column;
-    gap: 10px;
+    gap: .625rem;
 
     button {
         border: 2px solid black;
@@ -209,12 +209,18 @@
 }
 
 .select {
-    margin-top: 50px;
+    margin-top: 3.125rem;
 
     &__container {
         display: flex;
+        justify-content: flex-end;
         gap: 1rem;
-        margin-left: 25rem;
+    }
+
+    &__key {
+
+        color: gray;
+        font-size: 0.8rem;
     }
 
     &__black {
@@ -244,14 +250,16 @@
 .choose {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    width: 200px;
+    width: 15rem;
+    height: 18rem;
     background-color: rgb(208, 246, 212);
-    border-radius: 10px;
+    border-radius: .625rem;
     padding: 1rem;
+    margin-top: 6rem;
 
     button {
         border: 1px solid black;
+        margin: 10px;
 
     }
 }
@@ -299,6 +307,15 @@
         display: block;
     }
 }
+
+.grid-choose {
+    display: flex;
+    gap: 5rem;
+}
+
+.grid-color {}
+
+
 
 #root {
     max-width: 1280px;

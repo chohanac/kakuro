@@ -392,79 +392,85 @@ function CreateGrid() {
     }
     return (
         <div className='createPage'>
-            <section className='select'>
-                <div className='select__container'>
-                    <div className={`select__white ${selectedColor && "select__white--active"}`} onClick={() => colorClick(true)}></div>
-                    <div className={`select__black ${!selectedColor && "select__black--active"}`} onClick={() => colorClick(false)}></div>
-                </div>
-            </section>
-            <section className='grid'>
-                <div className='grid__container'>
-                    {grid.map((row, rowIndex) => (<div key={rowIndex} className='grid__row'>{row.map((cell, cellIndex) => (
-                        <div tabIndex="0" onKeyDown={gridKeyPress} key={cellIndex} className={`grid__cell ${duplicates.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--duplicate" : ""
-                            } ${duplicatesVertical.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--duplicate" : ""
-                            } ${cellErrors.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--errors" : ""
-                            }  ${cellErrorsVertical.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--errors" : ""
-                            } ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && grid[rowIndex][cellIndex][1] != 0 && "grid__cell--selected-tri"} ${grid[0].length === rowIndex + 1 && grid[rowIndex][cellIndex][1] !== 0 && "grid__cell--grey"} ${grid[rowIndex][cellIndex][1] == 0 && "grid__cell--white"}  ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && grid[rowIndex][cellIndex][1] == 0 && "grid__cell--selected"}`} onClick={(e) => {
-                                e.stopPropagation();
-                                const square = e.currentTarget.getBoundingClientRect();
-                                const x = e.clientX - square.left;
-                                const y = e.clientY - square.top;
-                                cellClick(rowIndex, cellIndex, false, x > y)
-                            }}>  <span className={`grid__cell-number   ${grid[rowIndex][cellIndex][1] === 0 && "grid__cell-number--center"} ${(grid[rowIndex][cellIndex][1] === 0 && grid[rowIndex][cellIndex][0] === -1) && "grid__cell-number--hidden"} ${(grid[rowIndex][cellIndex][1] !== 0 && grid[rowIndex][cellIndex][0] === -1) && "grid__cell-number--hidden"}  ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && "grid__cell-number--selected"}
-                        ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && gridInfo.current[rowIndex][cellIndex][1] === 0 && "grid__cell-number--selected--dark"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && blink && "grid__cell-number--selected--blink"}`}>{cell[0]}</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`grid__arrow-right ${(grid[rowIndex][cellIndex][1] === 0 || grid[rowIndex][cellIndex][0] === -1) && "grid__arrow-right--hidden"} ${grid[0].length === rowIndex + 1 && "grid__arrow-right--hidden"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && "grid__arrow-right--selected"}  `}>
-                                <path d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
-                            </svg>
-                            <svg
-                                viewBox="0 0 200 200"
-                                className={`grid__triangle ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && "grid__triangle--selected"} ${(grid[rowIndex][cellIndex][1] === 0) && "grid__triangle--hidden"}  ${grid.length === cellIndex + 1 && "grid__triangle--grey"}`}
-                                preserveAspectRatio="none" onClick={(e) => {
-                                    e.stopPropagation();
-                                    cellClick(rowIndex, cellIndex, true)
-                                }}
-                            >
-                                <path
-                                    d="M 0 0 L 200 200 L 200 200 Z"
-                                    fill="#ff6b6b"
-                                    stroke="black"
-                                    strokeWidth="2"
-                                />
-                            </svg>
-                            <span className={`grid__triangle-number ${(grid[rowIndex][cellIndex][1] === 0 || grid[rowIndex][cellIndex][1] === -1) && "grid__triangle-number--hidden"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && "grid__triangle-number--selected"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && blink && "grid__triangle-number--selected--blink"}`} onClick={(e) => {
-                                e.stopPropagation();
-                                cellClick(rowIndex, cellIndex, true)
-                            }} >{cell[1]}</span>
-
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`grid__arrow-down ${(grid[rowIndex][cellIndex][1] === 0 || grid[rowIndex][cellIndex][1] === -1) && "grid__arrow-down--hidden"}  ${grid.length === cellIndex + 1 && "grid__arrow-down--hidden"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && "grid__arrow-down--selected"} `} onClick={(e) => {
-                                e.stopPropagation();
-                                cellClick(rowIndex, cellIndex, true)
-                            }}>
-                                <path d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
-                            </svg>
-
+            <div className='grid-choose'>
+                <div className='grid-color'>
+                    <section className='select'>
+                        <div className='select__container'>
+                            <div>
+                                <span className='select__key'>A key</span>
+                                <div className={`select__white ${selectedColor && "select__white--active"}`} onClick={() => colorClick(true)}></div>
+                            </div>
+                            <div>
+                                <span className='select__key'>S key</span>
+                                <div className={`select__black ${!selectedColor && "select__black--active"}`} onClick={() => colorClick(false)}></div>
+                            </div>
                         </div>
+                    </section>
+                    <section className='grid'>
+                        <div className='grid__container'>
+                            {grid.map((row, rowIndex) => (<div key={rowIndex} className='grid__row'>{row.map((cell, cellIndex) => (
+                                <div tabIndex="0" onKeyDown={gridKeyPress} key={cellIndex} className={`grid__cell ${duplicates.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--duplicate" : ""
+                                    } ${duplicatesVertical.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--duplicate" : ""
+                                    } ${cellErrors.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--errors" : ""
+                                    }  ${cellErrorsVertical.some(([x, y]) => x === rowIndex && y === cellIndex) ? "grid__cell--errors" : ""
+                                    } ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && grid[rowIndex][cellIndex][1] != 0 && "grid__cell--selected-tri"} ${grid[0].length === rowIndex + 1 && grid[rowIndex][cellIndex][1] !== 0 && "grid__cell--grey"} ${grid[rowIndex][cellIndex][1] == 0 && "grid__cell--white"}  ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && grid[rowIndex][cellIndex][1] == 0 && "grid__cell--selected"}`} onClick={(e) => {
+                                        e.stopPropagation();
+                                        const square = e.currentTarget.getBoundingClientRect();
+                                        const x = e.clientX - square.left;
+                                        const y = e.clientY - square.top;
+                                        cellClick(rowIndex, cellIndex, false, x > y)
+                                    }}>  <span className={`grid__cell-number   ${grid[rowIndex][cellIndex][1] === 0 && "grid__cell-number--center"} ${(grid[rowIndex][cellIndex][1] === 0 && grid[rowIndex][cellIndex][0] === -1) && "grid__cell-number--hidden"} ${(grid[rowIndex][cellIndex][1] !== 0 && grid[rowIndex][cellIndex][0] === -1) && "grid__cell-number--hidden"}  ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && "grid__cell-number--selected"}
+                        ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && gridInfo.current[rowIndex][cellIndex][1] === 0 && "grid__cell-number--selected--dark"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && blink && "grid__cell-number--selected--blink"}`}>{cell[0]}</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`grid__arrow-right ${(grid[rowIndex][cellIndex][1] === 0 || grid[rowIndex][cellIndex][0] === -1) && "grid__arrow-right--hidden"} ${grid[0].length === rowIndex + 1 && "grid__arrow-right--hidden"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === false && "grid__arrow-right--selected"}  `}>
+                                        <path d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
+                                    </svg>
+                                    <svg
+                                        viewBox="0 0 200 200"
+                                        className={`grid__triangle ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && "grid__triangle--selected"} ${(grid[rowIndex][cellIndex][1] === 0) && "grid__triangle--hidden"}  ${grid.length === cellIndex + 1 && "grid__triangle--grey"}`}
+                                        preserveAspectRatio="none" onClick={(e) => {
+                                            e.stopPropagation();
+                                            cellClick(rowIndex, cellIndex, true)
+                                        }}
+                                    >
+                                        <path
+                                            d="M 0 0 L 200 200 L 200 200 Z"
+                                            fill="#ff6b6b"
+                                            stroke="black"
+                                            strokeWidth="2"
+                                        />
+                                    </svg>
+                                    <span className={`grid__triangle-number ${(grid[rowIndex][cellIndex][1] === 0 || grid[rowIndex][cellIndex][1] === -1) && "grid__triangle-number--hidden"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && "grid__triangle-number--selected"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && blink && "grid__triangle-number--selected--blink"}`} onClick={(e) => {
+                                        e.stopPropagation();
+                                        cellClick(rowIndex, cellIndex, true)
+                                    }} >{cell[1]}</span>
 
-                    ))}</div>))}
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`grid__arrow-down ${(grid[rowIndex][cellIndex][1] === 0 || grid[rowIndex][cellIndex][1] === -1) && "grid__arrow-down--hidden"}  ${grid.length === cellIndex + 1 && "grid__arrow-down--hidden"} ${selectedCell !== null && selectedCell.row === rowIndex && selectedCell.col === cellIndex && selectedCell.triangle === true && "grid__arrow-down--selected"} `} onClick={(e) => {
+                                        e.stopPropagation();
+                                        cellClick(rowIndex, cellIndex, true)
+                                    }}>
+                                        <path d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
+                                    </svg>
+
+                                </div>
+
+                            ))}</div>))}
+                        </div>
+                    </section >
                 </div>
-            </section >
-            <p className={`enter-num ${enterNum && "enter-num--show"}`}>Enter a number</p>
-            <section className='choose'>
-                <div className='options'>
-                    <p>Choose grid</p>
-                    <button className={`option__button ${gridSize === 3 && "option__button--active"}`} onClick={() => sizeChange(3)}>3x3</button>
-                    <button className={`option__button ${gridSize === 5 && "option__button--active"}`} onClick={() => sizeChange(5)}>5x5</button>
-                    <button className={`option__button ${gridSize === 8 && "option__button--active"}`} onClick={() => sizeChange(7)}>7x7</button>
-                    <button className={`option__button ${gridSize === 10 && "option__button--active"}`} onClick={() => sizeChange(9)}>9x9</button>
-                </div>
-                <button className={`choose__button`} onClick={() => clearGrid()}>Clear Grid</button>
-
-            </section>
-            <p className={`select-color select-color--hidden`}>Enter a number</p>
-
+                <section className='choose'>
+                    <div className='options'>
+                        <p>Choose grid</p>
+                        <button className={`option__button ${gridSize === 3 && "option__button--active"}`} onClick={() => sizeChange(3)}>3x3</button>
+                        <button className={`option__button ${gridSize === 5 && "option__button--active"}`} onClick={() => sizeChange(5)}>5x5</button>
+                        <button className={`option__button ${gridSize === 8 && "option__button--active"}`} onClick={() => sizeChange(7)}>7x7</button>
+                        <button className={`option__button ${gridSize === 10 && "option__button--active"}`} onClick={() => sizeChange(9)}>9x9</button>
+                    </div>
+                    <button className={`choose__button`} onClick={() => clearGrid()}>Clear Grid</button>
+                </section>
+            </div>
             <form onSubmit={handleSubmit}>
-                <label>
-                    Enter a name:
+                <label className='text'>
+                    Enter grid name:
                     <input
                         type="text"
                         value={entername}

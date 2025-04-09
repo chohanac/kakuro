@@ -8,6 +8,10 @@
     &__buttons {
         display: flex;
         gap: 2rem;
+
+        &--hide {
+            display: none;
+        }
     }
 
     &__button {
@@ -25,6 +29,7 @@
         &:active {
             border: 3px solid black;
         }
+
     }
 
     .grid-select {
@@ -34,7 +39,15 @@
         button {
             border: 2px solid black;
         }
+
+        &--hide {
+            visibility: hidden;
+        }
+
+
     }
+
+
 
     .group {
         display: flex;
@@ -46,21 +59,15 @@
 }
 
 .solution {
-    margin-top: 20px;
+    margin-top: 1.25rem;
     width: 60%;
-    height: 40px;
-    background-color: rgb(180, 188, 220);
+    height: 2.5rem;
     border: 1px solid black;
 
-    &--active {
-        background-color: rgb(124, 245, 49);
-        border: 3px solid black;
-    }
 
-    &:hover {
-        background-color: rgb(137, 181, 135);
-    }
 }
+
+
 
 .user-grid {
     display: flex;
@@ -70,6 +77,10 @@
 
     &__border {
         border: 2px solid black;
+    }
+
+    button {
+        margin: .25rem;
     }
 }
 

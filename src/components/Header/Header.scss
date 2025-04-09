@@ -22,11 +22,11 @@
         flex-direction: row;
         width: 100%;
         padding: 1.75rem 6rem;
-        gap: 200px;
+        gap: 12.5rem;
     }
 
     @include desktop {
-        gap: 600px;
+        gap: 37.5rem;
 
         padding: 1.75rem 8rem;
     }
@@ -50,12 +50,10 @@
             background-color: rgb(103, 163, 183);
 
         }
-
-
     }
 
     &__link {
-        width: 150px;
+        width: 9.375rem;
         height: 2.25rem;
         border-radius: 0.5rem;
         display: flex;
