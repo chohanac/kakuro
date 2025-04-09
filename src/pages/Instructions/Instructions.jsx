@@ -14,7 +14,7 @@ function Instructions() {
                 <div className="objective">
                     <div>
                         <h2>Objective</h2>
-                        <p>Fill in numbers for the white cells so that the sums of the numbers in each row/column block match the target number for that row or column. The numbers must be between 1 and 9, and no number can be repeated for a section.</p>
+                        <p>Fill in numbers for the white cells so that the sums of the numbers in each row or column block match the target number. The numbers must be between 1 and 9, and no number can be repeated for a section.</p>
                     </div>
                     <div>
                         <h2>Tip</h2>
