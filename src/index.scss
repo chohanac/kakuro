@@ -13,7 +13,10 @@
   color: inherit;
 }
 
+
 :root {
+  overflow-x: hidden;
+
   font-family: MainFont, Montserrat, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 600;

@@ -1,3 +1,6 @@
+@use "../../styles/colors" as *;
+@use "../../styles/mixins" as *;
+
 .cell {
     border: '1px solid #999';
     cursor: 'pointer';
@@ -14,6 +17,17 @@
     justify-content: center;
     align-items: center;
     gap: 50px;
+
+    @include desktop() {
+        margin-top: 100px;
+        margin-bottom: 300px;
+    }
+
+    form {
+        @include desktop() {
+            margin-top: 1rem;
+        }
+    }
 }
 
 
@@ -190,9 +204,6 @@
 }
 
 .options {
-
-    // display: flex;
-    // flex-direction: column;
     gap: .625rem;
 
     button {
@@ -250,6 +261,7 @@
 .choose {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 15rem;
     height: 18rem;
     background-color: rgb(208, 246, 212);
@@ -260,6 +272,19 @@
     button {
         border: 1px solid black;
         margin: 10px;
+
+
+
+    }
+
+    &__grid {
+        width: 150px;
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    @include desktop() {
+        width: 18rem;
 
     }
 }
@@ -310,10 +335,22 @@
 
 .grid-choose {
     display: flex;
-    gap: 5rem;
+    flex-direction: column;
+    margin-top: 150px;
+    align-items: center;
+
+    @include tablet() {
+        margin-top: 0;
+        gap: 5rem;
+        align-items: flex-start;
+        flex-direction: row;
+    }
+
+    @include desktop() {
+        gap: 10rem;
+    }
 }
 
-.grid-color {}
 
 
 

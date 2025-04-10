@@ -6,29 +6,35 @@
     background-color: rgb(108, 204, 108);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
     justify-content: center;
-    gap: .5rem;
     width: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    margin-bottom: 4rem;
     padding: 4rem;
     height: 0px;
 
     @include tablet {
+        justify-content: flex-end;
         flex-direction: row;
-        width: 100%;
-        padding: 1.75rem 6rem;
-        gap: 12.5rem;
+        gap: 0px;
+        padding: 1.75rem;
+        padding-left: 20.75rem;
     }
 
     @include desktop {
-        gap: 37.5rem;
+        border-radius: 8px;
+        justify-content: center;
+        gap: 12.5rem;
+        padding: 1.75rem 30rem;
+        margin: 0 auto;
+        position: static;
 
-        padding: 1.75rem 8rem;
+        .kakuro-logo {
+            font-size: 1.5rem;
+        }
+
     }
 
     &__image {
@@ -36,13 +42,14 @@
     }
 
     &__links {
-        margin-left: 8rem;
 
         display: flex;
 
         @include tablet {
             width: 100%;
             gap: .5rem;
+            margin-left: 8rem;
+
         }
 
         .active {

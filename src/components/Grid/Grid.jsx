@@ -726,8 +726,9 @@ function Grid({ gridList, solution, realGrid }) {
     const mouseLeave = () => {
         setHoverCell(null)
     };
+
     return (
-        <div className='gridPage' >
+        <div className={`gridPage ${grid.length === 5 && "gridPage--five"} ${grid.length === 7 && "gridPage--seven"} ${grid.length === 9 && "gridPage--nine"}`} >
             <section className={`grid ${solved && "grid--solved"}`}>
                 <div className='grid__container'>
                     {grid.map((row, rowIndex) => (<div key={rowIndex} className='grid__row'>{row.map((cell, cellIndex) => (

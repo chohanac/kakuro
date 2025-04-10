@@ -1,5 +1,44 @@
+@use "../../styles/colors" as *;
+@use "../../styles/mixins" as *;
+
 .gridPage {
     transform: scale(1.5);
+
+    &--five {
+        margin-bottom: 2rem;
+        // transform: scale(1.3);
+
+
+        @include tablet() {
+            margin-top: 0rem;
+
+            transform: scale(1.5);
+        }
+    }
+
+    &--seven {
+        transform: scale(1.2);
+        margin-bottom: 4rem;
+
+
+        @include tablet() {
+            transform: scale(1.5);
+        }
+    }
+
+    &--nine {
+        transform: scale(0.8);
+
+        @include tablet() {
+            margin-bottom: 6rem;
+
+            transform: scale(1.3);
+        }
+
+        @include desktop() {
+            transform: scale(1.5);
+        }
+    }
 
     .grid-background {
         background-color: red;

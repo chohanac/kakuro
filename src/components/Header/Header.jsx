@@ -6,7 +6,7 @@ const Header = () => {
         <nav className="header">
             <NavLink to="/">
                 <div className="kakuro-logo">
-                    <p>https://kakuro.pages.dev/</p>
+                    <p>Kakuro</p>
                 </div>
             </NavLink>
             <div className="header__links">

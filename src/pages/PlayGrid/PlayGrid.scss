@@ -1,3 +1,6 @@
+@use "../../styles/colors" as *;
+@use "../../styles/mixins" as *;
+
 .playPage {
     margin-top: 5rem;
     display: flex;
@@ -8,29 +11,17 @@
     &__buttons {
         display: flex;
         gap: 2rem;
+        margin-top: 2rem;
 
         &--hide {
             display: none;
         }
+
+        @include tablet() {
+            margin-top: 0rem;
+        }
+
     }
-
-    // &__button {
-    //     cursor: pointer;
-    //     background-color: lightgreen;
-    //     padding: 0.5rem;
-    //     width: 6.25rem;
-    //     border-radius: 0.5rem;
-    //     border: 1px solid black;
-
-    //     &:hover {
-    //         background-color: rgb(177, 233, 177);
-    //     }
-
-    //     &:active {
-    //         border: 3px solid black;
-    //     }
-
-    // }
 
     .grid-select {
         display: flex;
@@ -52,6 +43,21 @@
         align-items: center;
         gap: 2rem;
     }
+
+    @include tablet() {
+        .home {
+            margin-top: 1rem;
+        }
+    }
+
+    @include desktop() {
+
+        .home {
+            margin-left: 30rem;
+            margin-bottom: 1rem;
+        }
+    }
+
 }
 
 .solution {
@@ -65,7 +71,7 @@
 
 .user-grid {
     display: flex;
-    gap: 3rem;
+    gap: 1.2rem;
     width: 100%;
     flex: 1 1 0;
 
@@ -76,9 +82,20 @@
     button {
         margin: .25rem;
     }
+
+    @include tablet() {
+        gap: 3rem;
+    }
+
+    @include desktop() {
+        flex-direction: column;
+    }
+
+
 }
 
 .main-grid {
+
     margin-top: 2rem;
 
     &--five {
@@ -90,8 +107,12 @@
     }
 
     &--nine {
-        margin-top: 6rem;
+        @include tablet() {
+            margin-top: 6rem;
+        }
     }
+
+
 }
 
 form {
@@ -112,5 +133,18 @@ form {
 
     button {
         border: 1px solid black;
+    }
+}
+
+
+
+.user-grid-container {
+    // display: none;
+
+
+    @include desktop() {
+        position: absolute;
+        // left: 15vw;
+        margin-right: 40rem;
     }
 }

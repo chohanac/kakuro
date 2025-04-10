@@ -18,7 +18,6 @@ function PlayGrid({ gridURL = false }) {
     useEffect(() => {
         setSolution(false);
         setUrl(window.location.href);
-
         if (!name) {
             const makeNewGrid = defaultGrid.find(obj => obj.number === 1);
             setGridList(makeNewGrid.grid);
@@ -219,23 +218,20 @@ function PlayGrid({ gridURL = false }) {
         }
     }
     return (
-        <section className='playPage'>
-            <ul className={`playPage__buttons ${((name && !gridURL) || (gridURL && !(!isNaN(name) && parseInt(name) > 6 && parseInt(name) <= 20))) && "playPage__buttons--hide"}`}><li className={`playPage__button`} onClick={previous}><button>Previous</button></li> <li className={`playPage__button`} onClick={next}><button>Next</button></li></ul>
+        <section className={`playPage ${!name && "home"}`}>
+            <ul className={`playPage__buttons ${!name && "home"} ${((name && !gridURL) || (gridURL && !(!isNaN(name) && parseInt(name) >= 6 && parseInt(name) <= 20))) && "playPage__buttons--hide"}`}><li className={`playPage__button`} onClick={previous}><button>Previous</button></li> <li className={`playPage__button`} onClick={next}><button>Next</button></li></ul>
             {name && !gridURL &&
                 <div><p>Share this link to play with others in real time</p><p>{url}</p></div>}
-            <div className={`main-grid ${gridList.length === 3 && "main-grid--three"} ${gridList.length === 5 && "main-grid--five"}    ${gridList.length === 7 && "main-grid--seven"} ${gridList.length === 9 && "main-grid--nine"} `}>
+            <div className={`main-grid ${!name && "home"} ${gridList.length === 3 && "main-grid--three"} ${gridList.length === 5 && "main-grid--five"}    ${gridList.length === 7 && "main-grid--seven"} ${gridList.length === 9 && "main-grid--nine"} `}>
                 <Grid gridList={gridList} solution={solution} realGrid={realGrid} />
             </div>
-            <div className='group-container'></div>
-            <div className='group'>
+            <div className={`group ${!name && "home"}`}>
                 <button className={`solution ${solution && "solution--active"}`} onClick={() => setSolution(!solution)}>Solution</button>
 
                 <div className={`grid-select ${(name && !gridURL) && "grid-select--hide"}`}><button onClick={five}>5x5</button><button onClick={seven}>7x7</button><button onClick={nine}>9x9</button></div>
             </div>
-
-
             {!(name && !gridURL) &&
-                <div className='playgrid-form'>
+                <div className={`playgrid-form ${!name && "home"}`}>
                     <form onSubmit={handleSubmit}>
                         <p>Play Online</p>
                         <label className='form__name text'>
@@ -253,7 +249,7 @@ function PlayGrid({ gridURL = false }) {
                     </form>
                 </div>}
             {!name &&
-                <section>
+                <section className='user-grid-container'>
                     <div>
                         <h1>User Grids</h1>
                         <div className='user-grid'>
@@ -284,7 +280,6 @@ function PlayGrid({ gridURL = false }) {
                                 ))}
                             </div>
                             <div className='user-grid__border'></div>
-
                             <div>
                                 <h2>9X9</h2>
                                 {sizeGroups[9].map((grid) => (
@@ -296,7 +291,6 @@ function PlayGrid({ gridURL = false }) {
                         </div>
                     </div>
                 </section>
-
             }
             <footer className={`footer footer--home ${name && "footer--hide"}`}>
                 <p>Created by Anas Chohan - <a href="https://www.linkedin.com/in/anas-chohan/">Linkedin</a> - <a href="https://github.com/chohanac">Github</a></p>

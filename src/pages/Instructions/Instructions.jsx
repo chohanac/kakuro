@@ -14,7 +14,7 @@ function Instructions() {
                 <div className="objective">
                     <div>
                         <h2>Objective</h2>
-                        <p>Fill in numbers for the white cells so that the sums of the numbers in each row or column block match the target number. The numbers must be between 1 and 9, and no number can be repeated for a section.</p>
+                        <p>In the white blocks, fill in numbers so that the sum of the numbers in each row or column equal the target number. The numbers must be between 1 and 9, and no number can be repeated for a section.</p>
                     </div>
                     <div>
                         <h2>Tip</h2>
@@ -24,13 +24,13 @@ function Instructions() {
                 <div className="rules">
                     <h2>Rules</h2>
                     <p>
-                        1. You can only use the numbers 1-9 in each block.
+                        1. You can only use the numbers 1 to 9 in each block.
                     </p>
                     <p>
-                        2. Numbers can't be repeated in any target number row or column.
+                        2. Numbers can't be repeated in the rows or columns.
                     </p>
                     <p>
-                        3. The numbers in each row or column must sum to the target number.
+                        3. The sum of the numbers in the rows and columns must equal the target number.
                     </p>
                 </div>
             </section>

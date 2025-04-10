@@ -465,7 +465,7 @@ function CreateGrid() {
                         <button className={`option__button ${gridSize === 8 && "option__button--active"}`} onClick={() => sizeChange(7)}>7x7</button>
                         <button className={`option__button ${gridSize === 10 && "option__button--active"}`} onClick={() => sizeChange(9)}>9x9</button>
                     </div>
-                    <button className={`choose__button`} onClick={() => clearGrid()}>Clear Grid</button>
+                    <button className={`choose__button choose__grid`} onClick={() => clearGrid()}>Clear Grid</button>
                 </section>
             </div>
             <form onSubmit={handleSubmit}>

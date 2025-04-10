@@ -1,9 +1,23 @@
+@use "../../styles/colors" as *;
+@use "../../styles/mixins" as *;
+
 .instructions-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 2rem;
+
+    margin-top: 8rem;
+
+    @include tablet() {
+        flex-direction: column;
+        margin-top: 0rem;
+    }
+
+    @include desktop() {
+        margin-bottom: 300px;
+    }
 }
 
 .instructions-header {
@@ -17,10 +31,15 @@
 
 .instructions {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     max-width: 62.5rem;
     width: 100%;
     gap: 2rem;
+
+    @include tablet() {
+        flex-direction: row;
+    }
 
     .rules {
         flex: 1;
@@ -62,6 +81,10 @@
             margin: 0;
         }
     }
+
+
+
+
 }
 
 .title {
